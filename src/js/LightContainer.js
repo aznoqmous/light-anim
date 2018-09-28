@@ -54,7 +54,7 @@ export class LightContainer{
 
   get state(){
 
-    var activationOffsetY = window.innerHeight/2;
+    var activationOffsetY = window.innerHeight;
 
     if(this.lastState) {
       if ( this.top >= window.innerHeight || this.bot < 0 ){
