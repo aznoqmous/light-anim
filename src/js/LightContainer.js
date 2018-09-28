@@ -23,8 +23,8 @@ export class LightContainer{
   init(){
     var imgs = [];
     var dataAnim = this.el.getAttribute('data-anim') || '';
-    this.dataAnim = utils.stringToObj(dataAnim);
-    console.log(this.dataAnim);
+    this.type = utils.stringToObj(dataAnim);
+    console.log(this.type);
     // LOAD DOM IMGS FIRST
     var imgsFromDom = this.getFromDom();
     if(imgsFromDom.length){
@@ -50,7 +50,7 @@ export class LightContainer{
     // this.initGrid(imgs, 4);
     // this.initSun(imgs, 50, 80, 20, 4);
     // this.initArc(imgs, 50, 50, 30);
-    if( this.dataAnim.toContentBorder ) this.initToContentBorder(imgs);
+    if( this.type.toContentBorder ) this.initToContentBorder(imgs);
     else this.initFill(imgs);
 
     // TOGGLE IF VISIBLE
@@ -60,7 +60,7 @@ export class LightContainer{
 
   get state(){
 
-    var activationOffsetY = window.innerHeight;
+    var activationOffsetY = window.innerHeight/2;
 
     var top = this.el.offsetTop - window.scrollY;
     var bot = this.el.offsetTop + this.el.clientHeight - window.scrollY;
@@ -82,6 +82,7 @@ export class LightContainer{
   }
 
   toggleState(){
+
     if(this.state && !this.inited) this.init();
 
     var currentState = this.state;
@@ -90,6 +91,24 @@ export class LightContainer{
       if(this.state && img.setActive) img.setActive();
       else if (img.setOff) img.setOff();
     }
+
+    if(this.state && this.type.parallax) {
+      var deltaY = this.getDeltaScroll();
+      this.doParallax(deltaY);
+    }
+    this.lastScrollPos = window.scrollY;
+  }
+
+  //parallax
+  doParallax( delta ){
+    console.log(delta);
+    for (var i = 0; i < this.imgs.length; i++) {
+      var img = this.imgs[i];
+      img.doParallax( delta );
+    }
+  }
+  getDeltaScroll(){
+    return this.lastScrollPos - window.scrollY;
   }
 
   getRandom(){
@@ -146,7 +165,7 @@ export class LightContainer{
     for (var y = 0; y < rows; y++) {
       for (var x = 0; x < cols; x++) {
         var img = imgs[x+y*cols];
-        this.createImg(img, offX+x/cols*100+'%', offY+y/rows*100+'%');
+        this.createImg(img, offX+x/cols*100, offY+y/rows*100);
       }
     }
   }
@@ -184,7 +203,7 @@ export class LightContainer{
       var imgx = x + Math.sin( 2*th*i + thOffset ) * width  /2 ;
       var imgy = y + Math.cos( 2*th*i + thOffset ) * height /2 ;
       if(imgx > 0 && imgx < 100 && imgy > 0 && imgy < 100){
-        this.createImg(img, imgx+'%', imgy+'%');
+        this.createImg(img, imgx, imgy);
       }
 
     }
@@ -249,7 +268,7 @@ export class LightContainer{
       var obj = { x: newPosX, y: newPosY, width: img.newWidth, height: img.newHeight } ;
       var checkCollRes = this.checkCollItems(obj, this.dataImgs);
       if(!checkCollRes) {
-        this.createImg(img, newPosX/this.el.offsetWidth*100+'%', newPosY/this.el.offsetHeight*100+'%', img.newWidth, img.newHeight);
+        this.createImg(img, newPosX/this.el.offsetWidth*100, newPosY/this.el.offsetHeight*100, img.newWidth, img.newHeight);
         it = 0;
         return false;
       }
@@ -300,11 +319,11 @@ export class LightContainer{
     var dataType = img.getAttribute('data-anim') || '';
     var imgAnimData = utils.stringToObj(dataType);
     var dataAnim = {};
-    Object.assign(dataAnim, this.dataAnim);
+    Object.assign(dataAnim, this.type);
     Object.assign(dataAnim, imgAnimData);
 
-    var imgx = x || dataAnim.x+'%' || Math.random()*100+'%';
-    var imgy = y || dataAnim.y+'%' || Math.random()*100+'%';
+    var imgx = x || dataAnim.x || Math.random()*100;
+    var imgy = y || dataAnim.y || Math.random()*100;
 
 
     img.height = height || 100;

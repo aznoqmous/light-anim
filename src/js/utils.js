@@ -24,7 +24,8 @@ export function stringToObj(str){
 }
 
 export function perToRatio(per){
-  var perVal = parseInt(per.replace('%', ''));
+  var perVal = per+'';
+  perVal = parseInt(perVal.replace('%', ''));
   return perVal / 100;
 }
 

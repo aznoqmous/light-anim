@@ -31,9 +31,10 @@ export class LightImg{
     this.container = this.img.parentNode;
 
     this.scale = 1;
+    
     //CSS VALUES
     this.containerDuration = this.type.duration || Math.floor((Math.random()*5+5)) ;
-    this.containerTransition = 'all '+ this.containerDuration +'s ease';
+    this.containerTransition = 'all '+ this.containerDuration +'s linear';
     this.containerTransform = '';
 
     this.imgBlur = 'blur(0px)';
@@ -76,7 +77,6 @@ export class LightImg{
 
   }
 
-
   initIdle(){
     this.offX = this.x;
     this.offY = this.y;
@@ -92,7 +92,6 @@ export class LightImg{
   initCenter(){
     this.offX = '50%';
     this.offY = '50%';
-    console.log(this);
   }
   initRotate(){
     this.containerTransform += 'rotate('+Math.floor(Math.random()*360)+'deg)';
@@ -119,7 +118,6 @@ export class LightImg{
       this.offX = x*100*ratiopos+'%';
     }
 
-    console.log(this.x, this.y, x, y);
   }
   initBlur(){
     var maxBlur = 5;
@@ -127,14 +125,24 @@ export class LightImg{
     var zindex = (maxBlur - blur)*10 ;
     this.img.style['z-index'] = Math.floor(zindex);
     this.imgBlur = 'blur('+Math.floor(blur)+'px)';
-    console.log(blur, zindex);
+  }
+
+  initParallax(){
+    this.parallaxY = 0;
+    this.parallax = utils.randGate(0, 2) / 100;
+  }
+  doParallax(delta){
+    // console.log(delta, this.y, this.parallax);
+    this.parallaxY += this.parallax * delta;
+
+    this.applyActivePos();
   }
 
   setActive(){
     this.container.style.transition = this.containerTransition;
 
-    this.container.style.left = this.x;
-    this.container.style.top = this.y;
+    this.applyActivePos();
+
     if(this.type.blur) this.img.style.filter = this.imgBlur;
     this.img.classList.add('active');
   }
@@ -148,6 +156,18 @@ export class LightImg{
     if(this.type.blur) this.img.style.filter = 'blur(0px)';
     this.img.classList.remove('active');
   }
+
+  applyActivePos(){
+    var y = this.y;
+    if( this.parallax ) y += this.parallaxY;
+    this.container.style.left = this.x+"%";
+    this.container.style.top = y+"%";
+  }
+  addPos(x, y){
+    this.container.style.left = this.container.offsetLeft + x;
+    this.container.style.top = this.container.offsetTop + y;
+  }
+
 
   initPos(){
     this.container.style.left = this.offX;
