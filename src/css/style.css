@@ -49,10 +49,10 @@ body{
 /* ORBIT BEHAVIOUR */
 
 .light-container, .light-content{
-  transition: all 5s linear;
+  transition: all 2s linear;
   animation-duration: 20s;
   animation-iteration-count: infinite;
-   animation-timing-function: linear;
+  animation-timing-function: linear;
 }
 
 @keyframes idleWander{

@@ -34,8 +34,8 @@ export class LightImg{
     this.scale = img.scale;
 
     //CSS VALUES
-    this.containerDuration = this.type.duration || Math.floor((Math.random()*5+5)) ;
-    this.containerTransition = 'all '+ this.containerDuration +'s linear';
+    this.baseDuration = this.type.duration || Math.floor((Math.random()*5+5)) ;
+    this.containerDuration = this.baseDuration;
     this.containerTransform = '';
 
     this.imgBlur = 'blur(0px)';
@@ -77,6 +77,10 @@ export class LightImg{
     this.setOff();
     this.initPos();
 
+  }
+
+  get containerTransition(){
+    return 'all '+ this.containerDuration +'s ease-out';
   }
 
   initIdle(){
@@ -146,6 +150,12 @@ export class LightImg{
 
     if(this.type.blur) this.img.style.filter = this.imgBlur;
     this.img.classList.add('active');
+
+    var self = this;
+    setTimeout(function(){
+      self.containerDuration = 0;
+      self.container.style.transition = self.containerTransition;
+    }, this.containerDuration*1000);
   }
 
   setOff(){
@@ -156,6 +166,12 @@ export class LightImg{
 
     if(this.type.blur) this.img.style.filter = 'blur(0px)';
     this.img.classList.remove('active');
+
+    var self = this;
+    setTimeout(function(){
+      self.containerDuration = self.baseDuration;
+      self.container.style.transition = self.containerTransition;
+    }, this.containerDuration*1000);
   }
 
   applyActivePos(){
