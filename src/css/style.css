@@ -1,0 +1,57 @@
+/* LIGHT ANIM STYLES */
+body{
+  overflow-x: hidden;
+  width: 100vw;
+}
+.light-container{
+  position: relative;
+  /* transition: all 3s ease-out; */
+}
+.light-container.ready{
+  opacity: 1;
+}
+.liht-container > img{
+  opacity: 0;
+  display: none;
+}
+.light-container img{
+  pointer-events: none;
+  user-select: none;
+  opacity: 0;
+  transition: all 3s ease-out;
+}
+.light-container img.active{
+  opacity: 1;
+}
+.light-figure{
+  position: absolute;
+  animation-iteration-count: infinite;
+}
+
+.light-img{
+  /* transition: transform 5s ease filter 2s ease-out; */
+  /* transition: filter 3s ease-out opacity 1s ease; */
+  transition: all 3s ease-out;
+  animation-name: idleWander;
+  animation-duration: 5s;
+  animation-iteration-count: infinite;
+
+}
+
+.light-container.active{
+  border: 2px solid red;
+}
+
+.light-content{
+  z-index: 100;
+}
+@keyframes idleWander{
+  from { transform: translate(0px, 0px); }
+  20%{ transform: translate(10px, 5px); }
+  50%{ transform: translate(5px, 20px); }
+  to { transform: translate(0px, 0px); }
+}
+@keyframes infiniteRotate{
+  from { transform: translate(-50%, -50%) rotate(0deg); }
+  to { transform: translate(-50%, -50%) rotate(360deg); }
+}
