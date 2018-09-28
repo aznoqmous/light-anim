@@ -10,7 +10,7 @@ body{
 .light-container.ready{
   opacity: 1;
 }
-.liht-container > img{
+.light-container > img{
   opacity: 0;
   display: none;
 }
@@ -18,7 +18,6 @@ body{
   pointer-events: none;
   user-select: none;
   opacity: 0;
-  transition: all 3s ease-out;
 }
 .light-container img.active{
   opacity: 1;
@@ -29,9 +28,7 @@ body{
 }
 
 .light-img{
-  /* transition: transform 5s ease filter 2s ease-out; */
-  /* transition: filter 3s ease-out opacity 1s ease; */
-  transition: all 3s ease;
+  transition: opacity 3s ease;
   animation-name: idleWander;
   animation-duration: 5s;
   animation-iteration-count: infinite;
@@ -53,6 +50,11 @@ body{
   animation-duration: 20s;
   animation-iteration-count: infinite;
   animation-timing-function: linear;
+}
+
+.light-debug{
+  position: absolute;
+  max-width: 100%;
 }
 
 @keyframes idleWander{
