@@ -50,6 +50,8 @@ export class LightContainer{
     // this.initGrid(imgs, 4);
     // this.initSun(imgs, 50, 80, 20, 4);
     // this.initArc(imgs, 50, 50, 30);
+    if(this.type.orbit) this.initOrbit();
+
     if( this.type.toContentBorder ) this.initToContentBorder(imgs);
     else this.initFill(imgs);
 
@@ -101,7 +103,6 @@ export class LightContainer{
 
   //parallax
   doParallax( delta ){
-    console.log(delta);
     for (var i = 0; i < this.imgs.length; i++) {
       var img = this.imgs[i];
       img.doParallax( delta );
@@ -207,6 +208,10 @@ export class LightContainer{
       }
 
     }
+  }
+  initOrbit(){
+    this.el.style['animation-name'] = 'infiniteRotate';
+    this.innerContent.style['animation-name'] = 'infiniteCounterRotate';
   }
 
   //display img to contents border
