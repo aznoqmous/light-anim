@@ -32,7 +32,7 @@ body{
   /* transition: transform 5s ease filter 2s ease-out; */
   /* transition: filter 3s ease-out opacity 1s ease; */
   transition: all 3s ease-out;
-  animation-name: idleWander;
+  /* animation-name: idleWander; */
   animation-duration: 5s;
   animation-iteration-count: infinite;
 

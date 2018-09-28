@@ -13,7 +13,6 @@ export class LightContainer{
     this.dataImgs = [];
     this.start = el.offsetTop;
     this.maxErrors = 1000;
-    this.imgsCount = 50; // for random
     this.minSize = 50;
     this.maxSize = 200;
     this.lastState = 0;
@@ -40,13 +39,6 @@ export class LightContainer{
       imgs = imgs.concat(imgsFromData);
     }
 
-
-    //TRY TO FILL WITH RANDOM IF EMPTY
-    if(!imgs.length){
-      imgs = imgs.concat(this.getRandom());
-    }
-
-    // this.initRandom(imgs);
     // this.initGrid(imgs, 4);
     // this.initSun(imgs, 50, 80, 20, 4);
     // this.initArc(imgs, 50, 50, 30);
@@ -64,20 +56,16 @@ export class LightContainer{
 
     var activationOffsetY = window.innerHeight/2;
 
-    var top = this.el.offsetTop - window.scrollY;
-    var bot = this.el.offsetTop + this.el.clientHeight - window.scrollY;
-
-    var topContent = top + this.innerContent.offsetTop;
-    var botContent = topContent  + this.innerContent.offsetHeight;
-
     if(this.lastState) {
-      if ( top >= window.innerHeight || bot < 0 ){
+      if ( this.top >= window.innerHeight || this.bot < 0 ){
         this.lastState = 0;
+
       }
     }
     else{
-      if( topContent <= activationOffsetY && botContent > -activationOffsetY) {
+      if( this.contentTop <= activationOffsetY && this.contentBot > -activationOffsetY) {
         this.lastState = 1;
+
       }
     }
     return this.lastState;
@@ -109,19 +97,34 @@ export class LightContainer{
     }
   }
   getDeltaScroll(){
-    return this.lastScrollPos - window.scrollY;
+    return ( this.contentHalf - this.scrollHalf ) / this.el.offsetHeight ;
   }
 
-  getRandom(){
-    var imgsEl = [];
-    for (var i = 0; i < this.imgsCount; i++) {
-      var img = new Image();
-      var randSrc = config.IMG_DIR+Math.floor(Math.random()*config.FILES_COUNT)+'.svg';
-      img.setAttribute('data-src', randSrc);
-      imgsEl.push(img);
-    }
-    return imgsEl;
+  /* GET CONTAINER's */
+  get top(){
+    return this.el.offsetTop - window.scrollY;
   }
+  get bot(){
+    return this.el.offsetTop + this.el.clientHeight - window.scrollY;
+  }
+  get half(){
+    return this.top + this.el.innerHeight / 2;
+  }
+
+  get contentTop(){
+    return this.top + this.innerContent.offsetTop;
+  }
+  get contentBot(){
+    return this.contentTop + this.innerContent.offsetHeight;
+  }
+  get contentHalf(){
+    return this.contentTop + this.innerContent.offsetHeight / 2;
+  }
+
+  get scrollHalf(){
+    return window.scrollY + window.innerHeight / 2;
+  }
+
   getFromDom(){
     return Array.from(this.el.getElementsByClassName('light-img'));
   }
@@ -148,14 +151,6 @@ export class LightContainer{
       imgsEl.push(img);
     }
     return imgsEl;
-  }
-
-  //display img randomly
-  initRandom(imgs){
-    for (var i = 0; i < imgs.length; i++) {
-      var img = imgs[i];
-      this.createImg(img);
-    }
   }
 
   //display imgs on a grid
@@ -233,11 +228,14 @@ export class LightContainer{
       img.addEventListener('load', function(){
         imgsLoad++;
         this.loaded = true;
-        var imgRatio = this.naturalWidth / this.naturalHeight;
-        var newWidth = (Math.random() * (self.maxSize - self.minSize) + self.minSize);
-        var newHeight = newWidth * imgRatio || self.maxSize;
+
+        var  newWidth = (self.maxSize + self.minSize) /2;
+        if(!self.type.scale) newWidth = (Math.random() * (self.maxSize - self.minSize) + self.minSize);
+
+        this.scale = newWidth / self.maxSize;
+
         this.newWidth = newWidth;
-        this.newHeight = newHeight;
+        this.newHeight = self.maxSize;
         if( imgs.length - imgsLoad <= 0) self.processFill(imgs);
       });
     }
@@ -329,7 +327,6 @@ export class LightContainer{
 
     var imgx = x || dataAnim.x || Math.random()*100;
     var imgy = y || dataAnim.y || Math.random()*100;
-
 
     img.height = height || 100;
     img.width = width || 100;

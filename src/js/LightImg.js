@@ -13,6 +13,7 @@ import * as utils from './utils.js';
     fromBoth: false,
     toContentBorder: false,
     parallax: false,
+    scale: false,
     blur: false,
     rotate: false,
     rotateinf: false,
@@ -30,8 +31,8 @@ export class LightImg{
     this.parent = this.img.parentNode.parentNode;
     this.container = this.img.parentNode;
 
-    this.scale = 1;
-    
+    this.scale = img.scale;
+
     //CSS VALUES
     this.containerDuration = this.type.duration || Math.floor((Math.random()*5+5)) ;
     this.containerTransition = 'all '+ this.containerDuration +'s linear';
@@ -43,6 +44,7 @@ export class LightImg{
   }
 
   init(){
+
 
     this.container.style['animation-duration'] = Math.random()*5+5+'s';
 
@@ -129,12 +131,11 @@ export class LightImg{
 
   initParallax(){
     this.parallaxY = 0;
-    this.parallax = utils.randGate(0, 2) / 100;
+    this.parallax = this.scale*10;
   }
   doParallax(delta){
     // console.log(delta, this.y, this.parallax);
-    this.parallaxY += this.parallax * delta;
-
+    this.parallaxY = this.parallax * delta;
     this.applyActivePos();
   }
 
@@ -151,7 +152,7 @@ export class LightImg{
     this.container.style.transition = 'unset';
 
     if(this.type.reload) this.initPos();
-
+    if(this.type.parallax) this.parallaxY = 0;
 
     if(this.type.blur) this.img.style.filter = 'blur(0px)';
     this.img.classList.remove('active');
