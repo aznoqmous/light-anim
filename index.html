@@ -9,12 +9,12 @@
 
     <style media="screen">
       /* STYLES AUTRES  */
-      * { box-sizing: border-box; padding: 0; margin: 0; color: #474747; }
+      * { box-sizing: border-box; padding: 0; margin: 0; color: white; }
 
       body{
         width: 100vw;
         overflow-x: hidden;
-        background: white;
+        background: #172c44;
         font-family: arial;
       }
       .container {
@@ -38,6 +38,9 @@
         justify-content: center;
         align-items: center;
       }
+      .bottom{
+        justify-content: flex-end;
+      }
       /* logo */
       .light-content{
         max-width: calc(100vw - 100px);
@@ -52,23 +55,18 @@
         opacity: 1;
       }
 
-
-      /* ANIM ACTIVATION */
-      /* .light-content { border-top: 1px solid red; border-bottom: 1px solid red; }
-      .light-container { border-top: 1px solid rgba(0,0,0,0.2); border-bottom: 1px solid rgba(0,0,0,0.2); }
-      body:after{ content: ""; position: fixed; top: 50vh; right: 50px; width: 100px; border-bottom: 1px solid white; } */
-
     </style>
   </head>
   <body>
     <!-- TEST HOME FULLSCREEN -->
     <div class="fullscreen">
-      <div class="light-container" style="width: 100vw; height: 100vh" data-src="res/svgs/img" data-num="32" data-max="44"
+      <div class="light-container" style="width: 100vw; height: 50vh"
+      data-src="res/svgs/img" data-num="44" data-max="44"
       data-anim="reload fromBoth duration:4">
-        <div class="center">
+        <div class="center bottom">
           <div class="light-content">
-            <h1>light-anims.js</h1>
 
+            <h1>light-anims.js</h1>
           </div>
         </div>
       </div>
@@ -77,10 +75,10 @@
     <!-- TEST HOME FULLSCREEN -->
     <div class="fullscreen">
       <div class="light-container" style="width: 100vw; height: 100vh" data-src="res/svgs/img" data-num="32" data-max="44"
-      data-anim="idle parallax duration:4">
+      data-anim="parallax blur duration:0">
         <div class="center">
           <div class="light-content">
-            <h2>parallax</h2>
+            <img width="600px" src="res/logo.svg" alt="">
           </div>
         </div>
       </div>
@@ -92,18 +90,18 @@
       data-src="res/svgs/img" data-num="30" data-max="44"
       data-anim="orbit reload fromCenter toContentBorder duration:1">
         <div class="center">
-          <div class="light-content" class="center">
+          <div class="light-content">
             <img style="height: 50vh; max-height: 600px; width: auto;" src="res/products/product0.png" alt="">
-            <h2 style="width: 100%; text-align: center; text-shadow: 0 0 5px white; padding: 10px;"> Animation duration 1s </h2>
+
           </div>
         </div>
       </div>
       <div class="light-container" style="width: 50vw; height: 50vh" data-src="res/svgs/img" data-num="30" data-max="44"
-      data-anim="parallax reload fromCenter toContentBorder duration:2">
+      data-anim="parallax reload fromCenter toContentBorder duration:0">
         <div class="center">
           <div class="light-content">
             <img style="height: 50vh; max-height: 600px; width: auto;" src="res/products/product1.png" alt="">
-            <h2 style="width: 100%; text-align: center; text-shadow: 0 0 5px white; padding: 10px;"> Animation duration 2s </h2>
+
           </div>
         </div>
       </div>
