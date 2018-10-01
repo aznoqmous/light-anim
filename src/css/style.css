@@ -11,12 +11,14 @@ body{
   opacity: 1;
 }
 .light-container > img{
-  display: none;
   pointer-events: none;
   user-select: none;
   opacity: 0;
 }
-.light-container > img.active{
+.light-container > figure img{
+  opacity: 0;
+}
+.light-container > figure img.active{
   opacity: 1;
 }
 .light-figure{
