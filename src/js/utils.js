@@ -34,3 +34,7 @@ export function signOf(val){
   if(val > 0) return 1;
   return 0;
 }
+
+export function getStyle(el, style){
+  return window.getComputedStyle(el).getPropertyValue(style);
+}

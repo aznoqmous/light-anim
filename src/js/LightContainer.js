@@ -41,7 +41,7 @@ export class LightContainer{
     }
 
     /* IF MODE ARGS */
-    if( this.type.debug || config.DEBUG ) this.displayParams();
+    if( this.type.debug || config.DEBUG ) this.doDebug();
 
     if(this.type.orbit) this.initOrbit();
 
@@ -54,12 +54,20 @@ export class LightContainer{
     this.toggleState();
   }
 
+  //debug mode
+  doDebug(){
+    this.displayParams();
+    this.displayContentBorders();
+  }
   displayParams(){
     var paramsEl = document.createElement('h2');
     var params = this.el.getAttribute('data-anim').replace('debug', '');
     paramsEl.classList.add('light-debug');
     paramsEl.innerHTML = params;
     this.innerContent.appendChild(paramsEl);
+  }
+  displayContentBorders(){
+    this.innerContent.style.border = '1px solid red';
   }
 
   get state(){
@@ -230,6 +238,8 @@ export class LightContainer{
   initOrbit(){
     this.el.style['animation-name'] = 'infiniteRotate';
     this.innerContent.style['animation-name'] = 'infiniteCounterRotate';
+    this.orbitDuration = window.getComputedStyle(this.el).getPropertyValue('animation-duration');
+    console.log(this.orbitDuration);
   }
 
   //display img to contents border
@@ -241,7 +251,6 @@ export class LightContainer{
   }
 
   //display imgs so they fill and avoid touching
-
   initToFill(imgs){
     this.imgLoads = 0;
     this.imgsToLoad = imgs.length;
@@ -253,12 +262,11 @@ export class LightContainer{
     for (var i = 0; i < imgs.length; i++) {
       var img = imgs[i];
 
-      this.loadImg(img);
+      this.loadImgForFill(img);
 
     }
   }
-
-  loadImg(img){
+  loadImgForFill(img){
     var self = this;
 
     img.style.width = 100+'px';
@@ -304,7 +312,7 @@ export class LightContainer{
     while(1){
 
       var newWidth = Math.random() * (config.MAX_SIZE - config.MIN_SIZE) + config.MIN_SIZE;
-      var newHeight = newWidth * ratio;
+      var newHeight = newWidth / ratio;
 
       var newPosX = Math.random() * ( this.el.offsetWidth - newWidth ) ;
       var newPosY = Math.random() * ( this.el.offsetHeight - newHeight ) ;
@@ -321,7 +329,6 @@ export class LightContainer{
 
         this.initImg(img, newPosX, newPosY, newWidth, newHeight);
 
-        // img.applyActivePos();
         this.createDataObject(imgActivePos);
 
         it = 0;
@@ -386,7 +393,6 @@ export class LightContainer{
     if(!img.src) {
       img.addEventListener('load', function(){
         this.loaded = true;
-        console.log('inited');
         newLightImg.init();
       });
       img.src = img.getAttribute('data-src');

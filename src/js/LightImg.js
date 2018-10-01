@@ -53,19 +53,17 @@ export class LightImg{
 
     this.container.style['animation-duration'] = Math.random()*5+5+'s';
 
-    this.img.style['animation-duration'] = Math.random()*5+5+'s';
+    if( ! this.type.orbit ) this.img.style['animation-duration'] = Math.random()*5+5+'s';
 
     this.img.style.transition = this.imgTransition;
 
     this.img.style.width = '100%';
     this.img.style.height = 'auto';
 
-    console.log(this.container);
-
     if( !this.container.offsetWidth ) this.container.style.width = 100+'px';
     if( !this.container.offsetHeight ) this.container.style.height = 100+'px';
 
-    // MOVE TYPES
+    // INIT FROM
     if( this.type.fromAround )      this.initAround();
     else if( this.type.fromBoth )   this.initBoth();
     else if( this.type.fromLeft )   this.initLeft();
@@ -73,13 +71,16 @@ export class LightImg{
     else if( this.type.fromCenter ) this.initCenter();
     else  this.initIdle();
 
-    if( this.type.parallax ) this.initParallax();
+
 
     if(this.type.toContentBorder) this.containerTransform = 'translate(-50%, -50%)';
 
     if( this.type.blur ) this.initBlur();
+    if( !this.type.nowander ) this.initWander();
     if( this.type.rotate ) this.initRotate();
     if( this.type.rotateinf ) this.initRotateInf();
+    if( this.type.parallax ) this.initParallax();
+    if( this.type.orbit ) this.initOrbit();
 
     this.container.style.transform = this.containerTransform;
     this.container.style.transition = this.containerTransition;
@@ -136,6 +137,18 @@ export class LightImg{
 
   }
 
+  initWander(){
+    this.img.style['animation-name'] = 'idleWander';
+  }
+  initOrbit(){
+    var duration = utils.getStyle(this.parent, 'animation-duration');
+    var iteration = utils.getStyle(this.parent, 'animation-iteration-count');
+    var timingfunc = utils.getStyle(this.parent, 'animation-timing-function');
+    this.img.style['animation-name'] = 'infiniteCounterRotate';
+    this.img.style['animation-duration'] = duration;
+    this.img.style['animation-iteration-count'] = iteration;
+    this.img.style['animation-timing-function'] = timingfunc;
+  }
 
   initParallax(){
     this.parallaxY = 0;
