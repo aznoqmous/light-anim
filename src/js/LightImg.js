@@ -22,6 +22,7 @@ import * as utils from './utils.js';
   }
 */
 export class LightImg{
+
   constructor(img, x, y, type){
     this.img = img;
     this.x = x;
@@ -43,7 +44,9 @@ export class LightImg{
     this.imgBlur = 'blur(0px)';
 
     this.init();
+
   }
+
 
   init(){
 
@@ -52,12 +55,9 @@ export class LightImg{
 
     this.img.style['animation-duration'] = Math.random()*5+5+'s';
 
-    this.img.style.width = this.img.width+'px';
-    this.img.style.height = this.img.height+'px';
-
-    console.log(this.img.offsetWidth, this.img.offsetHeight);
-
     this.img.style.transition = this.imgTransition;
+
+    
 
     // MOVE TYPES
     if( this.type.fromAround )      this.initAround();
@@ -77,9 +77,6 @@ export class LightImg{
 
     this.container.style.transform = this.containerTransform;
     this.container.style.transition = this.containerTransition;
-
-    var rect = this.img.getBoundingClientRect();
-    console.log(rect.width, rect.height);
 
     this.setOff();
     this.initPos();

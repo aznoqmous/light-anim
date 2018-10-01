@@ -5,7 +5,7 @@ import {LightImg} from './LightImg.js';
 export class LightContainer{
 
   constructor(el){
-    this.startT = Date.now();
+
     this.el = el;
     this.ratio = this.el.offsetWidth / this.el.offsetHeight;
     this.innerContent = this.el.getElementsByClassName('light-content')[0];
@@ -20,10 +20,11 @@ export class LightContainer{
   }
 
   init(){
+    this.startT = Date.now();
     var imgs = [];
     var dataAnim = this.el.getAttribute('data-anim') || '';
     this.type = utils.stringToObj(dataAnim);
-    console.log(this.type);
+
     // LOAD DOM IMGS FIRST
     var imgsFromDom = this.getFromDom();
     if(imgsFromDom.length){
@@ -58,7 +59,6 @@ export class LightContainer{
     var params = this.el.getAttribute('data-anim').replace('debug', '');
     paramsEl.classList.add('light-debug');
     paramsEl.innerHTML = params;
-    console.log(paramsEl);
     this.innerContent.appendChild(paramsEl);
   }
 
@@ -104,7 +104,6 @@ export class LightContainer{
     this.lastScrollPos = window.scrollY;
   }
 
-
   // on scroll
   doBlur(delta){
     for (var i = 0; i < this.imgs.length; i++) {
@@ -121,7 +120,6 @@ export class LightContainer{
   getDeltaScroll(){
     return ( this.contentHalf - this.scrollHalf ) / this.el.offsetHeight ;
   }
-
 
   /* GET CONTAINER's */
   get top(){
@@ -157,7 +155,7 @@ export class LightContainer{
     if( !max ) max = val;
     else max = parseInt(max);
 
-    console.log(pre, val, max);
+    console.log('Loading from data', pre, val, max);
 
     var imgsEl = [];
     var arrImgsIndex = [];
@@ -240,33 +238,41 @@ export class LightContainer{
   }
 
   //display imgs so they fill and avoid touching
+
   initFill(imgs){
+    this.imgLoads = 0;
+    this.imgsToLoad = imgs.length;
+    this.loadedImgs = [];
     this.failedFill = [];
-    var imgsLoad = 0;
+
     if(this.innerContent) this.createDataObject(this.innerContent);
-    var self = this;
 
     for (var i = 0; i < imgs.length; i++) {
       var img = imgs[i];
-      img.src = img.getAttribute('data-src');
-      img.addEventListener('load', function(){
-        imgsLoad++;
-        this.loaded = true;
 
-        var  newWidth = (self.maxSize + self.minSize) /2;
-        if(!self.type.scale) newWidth = (Math.random() * (self.maxSize - self.minSize) + self.minSize);
+      this.loadImg(img);
 
-        this.scale = newWidth / self.maxSize;
-
-        this.newWidth = newWidth;
-        this.newHeight = 0;
-        if( imgs.length - imgsLoad <= 0) self.processFill(imgs);
-      });
     }
   }
-  processFill(imgs){
-    console.log(Date.now() - this.startT +'ms');
-    imgs = this.sortImgs(imgs);
+
+  loadImg(img){
+    var self = this;
+
+    img.style.width = 100+'px';
+    img.style.height = 'auto';
+
+    img.addEventListener('load', function(){
+      self.imgLoads++;
+      this.loaded = true;
+      self.loadedImgs.push(this);
+      self.createImg( this, 0, 0 );
+      if( self.imgsToLoad - self.imgLoads <= 0) self.processFill();
+    });
+    img.src = img.getAttribute('data-src');
+  }
+  processFill(){
+    console.log('Place imgs', Date.now() - this.startT +'ms');
+    var imgs = this.sortImgs(this.imgs);
     for (var i = 0; i < imgs.length; i++) {
       var img = imgs[i];
       this.placeObject(img);
@@ -283,23 +289,43 @@ export class LightContainer{
     }
   }
   createDataObject(el){
-    var obj = {x: el.offsetLeft, y: el.offsetTop, width: el.offsetWidth, height: el.offsetHeight};
+    var obj = {x: el.offsetLeft, y: el.offsetTop, width: el.offsetWidth || el.width, height: el.offsetHeight || el.height};
     this.dataImgs.push(obj);
   }
   placeObject(img){
     var it = 0;
+    var rect = img.img.getBoundingClientRect();
 
-    var natW = img.width;
-    var natH = img.height;
-
+    var ratio = img.img.offsetWidth / img.img.offsetHeight;
+    console.log(ratio);
     while(1){
-      var newPosX = Math.random() * ( this.el.offsetWidth - img.newWidth ) ;
-      var newPosY = Math.random() * ( this.el.offsetHeight - img.newHeight ) ;
-      var obj = { x: newPosX, y: newPosY, width: img.newWidth, height: img.newHeight } ;
+
+      var newWidth = Math.random() * (config.MAX_SIZE - config.MIN_SIZE) + config.MIN_SIZE;
+      var newHeight = newWidth * ratio;
+
+      var newPosX = Math.random() * ( this.el.offsetWidth - newWidth ) ;
+      var newPosY = Math.random() * ( this.el.offsetHeight - newHeight ) ;
+
+      // console.log(newPosX, newPosY, newWidth, newHeight);
+
+      var obj = { x: newPosX, y: newPosY, width: newWidth, height: newHeight } ;
       var checkCollRes = this.checkCollItems(obj, this.dataImgs);
+
       if(!checkCollRes) {
 
-        this.createImg(img, newPosX/this.el.offsetWidth*100, newPosY/this.el.offsetHeight*100, img.newWidth, img.newHeight);
+        var imgActivePos = {offsetLeft: newPosX, offsetTop: newPosY, offsetWidth:  newWidth, offsetHeight: newHeight };
+
+        img.container.style.width = newWidth+'px';
+        img.container.style.height = newHeight+'px';
+        img.img.style.width = '100%';
+        img.img.style.height = 'auto';
+        img.x = newPosX / this.el.offsetWidth * 100;
+        img.y = newPosY / this.el.offsetHeight * 100;
+        img.scale = newWidth / config.MAX_SIZE;
+
+        img.applyActivePos();
+        this.createDataObject(imgActivePos);
+
         it = 0;
         return false;
       }
@@ -330,7 +356,8 @@ export class LightContainer{
       }
   }
 
-  createImg(img, x, y, width, height){
+  createImg(img, x, y){
+
     img.classList.add('light-img');
 
     if(!img.src) {
@@ -356,11 +383,6 @@ export class LightContainer{
     var imgx = x || dataAnim.x || Math.random()*100;
     var imgy = y || dataAnim.y || Math.random()*100;
 
-    img.width = width;
-    img.height = height || 100;
-
-
-
 
     var newLightImg  = new LightImg(img, imgx, imgy, dataAnim);
 
@@ -368,14 +390,8 @@ export class LightContainer{
 
     if(img.loaded) img.classList.add('loaded');
 
-
-    // this.createDataObject(newLightImg.container);
-    var x = utils.perToRatio(newLightImg.x) * this.el.offsetWidth;
-    var y = utils.perToRatio(newLightImg.y) * this.el.offsetHeight;
-
-    var imgActivePos = {offsetLeft: x, offsetTop: y, offsetWidth:  width, offsetHeight: height };
-
-    this.createDataObject(imgActivePos);
   }
+
+
 
 }
