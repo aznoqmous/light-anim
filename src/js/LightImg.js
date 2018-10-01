@@ -34,10 +34,12 @@ export class LightImg{
     this.scale = img.scale;
 
     //CSS VALUES
+    // this.baseDuration = this.type.duration || Math.floor((Math.random()*5+5)) ;
     this.baseDuration = this.type.duration || Math.floor((Math.random()*5+5)) ;
     this.containerDuration = this.baseDuration;
     this.containerTransform = '';
 
+    this.imgTransition = 'opacity 3s ease';
     this.imgBlur = 'blur(0px)';
 
     this.init();
@@ -50,10 +52,12 @@ export class LightImg{
 
     this.img.style['animation-duration'] = Math.random()*5+5+'s';
 
-    this.img.style.width = this.img.width;
-    this.img.style.height = this.img.height;
+    this.img.style.width = this.img.width+'px';
+    this.img.style.height = this.img.height+'px';
 
+    console.log(this.img.offsetWidth, this.img.offsetHeight);
 
+    this.img.style.transition = this.imgTransition;
 
     // MOVE TYPES
     if( this.type.fromAround )      this.initAround();
@@ -73,6 +77,9 @@ export class LightImg{
 
     this.container.style.transform = this.containerTransform;
     this.container.style.transition = this.containerTransition;
+
+    var rect = this.img.getBoundingClientRect();
+    console.log(rect.width, rect.height);
 
     this.setOff();
     this.initPos();
@@ -125,30 +132,35 @@ export class LightImg{
     }
 
   }
-  initBlur(){
-    var maxBlur = 5;
-    var blur = maxBlur * ( 1 - this.scale / config.MAX_SCALE );
-    var zindex = (maxBlur - blur)*10 ;
-    this.img.style['z-index'] = Math.floor(zindex);
-    this.imgBlur = 'blur('+Math.floor(blur)+'px)';
-  }
+
 
   initParallax(){
     this.parallaxY = 0;
     this.parallax = this.scale*10;
   }
   doParallax(delta){
-    // console.log(delta, this.y, this.parallax);
     this.parallaxY = this.parallax * delta;
     this.applyActivePos();
   }
 
+  initBlur(){
+    var blur = 0;
+    if( this.scale < 0.5 ) blur = this.scale / 0.5;
+    else blur = this.scale - 0.5 ;
+    blur = Math.floor(blur*10);
+    this.imgBlur = blur;
+  }
+  doBlur(delta){
+    this.img.style.filter = 'blur('+ this.imgBlur * Math.abs(delta) +'px)';
+  }
+
   setActive(){
     this.container.style.transition = this.containerTransition;
+    this.img.style.transition = this.imgTransition;
 
     this.applyActivePos();
 
-    if(this.type.blur) this.img.style.filter = this.imgBlur;
+
     this.img.classList.add('active');
 
     var self = this;
@@ -160,6 +172,7 @@ export class LightImg{
 
   setOff(){
     this.container.style.transition = 'unset';
+    this.img.style.transition = 'unset';
 
     if(this.type.reload) this.initPos();
     if(this.type.parallax) this.parallaxY = 0;
@@ -171,6 +184,7 @@ export class LightImg{
     setTimeout(function(){
       self.containerDuration = self.baseDuration;
       self.container.style.transition = self.containerTransition;
+      self.img.style.transition = self.imgTransition;
     }, this.containerDuration*1000);
   }
 

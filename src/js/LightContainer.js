@@ -39,22 +39,32 @@ export class LightContainer{
       imgs = imgs.concat(imgsFromData);
     }
 
-    // this.initGrid(imgs, 4);
-    // this.initSun(imgs, 50, 80, 20, 4);
-    // this.initArc(imgs, 50, 50, 30);
+    /* IF MODE ARGS */
+    if( this.type.debug || config.DEBUG ) this.displayParams();
+
     if(this.type.orbit) this.initOrbit();
 
     if( this.type.toContentBorder ) this.initToContentBorder(imgs);
     else this.initFill(imgs);
+    /* END MODE IF ARGS */
 
     // TOGGLE IF VISIBLE
     this.inited = true;
     this.toggleState();
   }
 
+  displayParams(){
+    var paramsEl = document.createElement('h2');
+    var params = this.el.getAttribute('data-anim').replace('debug', '');
+    paramsEl.classList.add('light-debug');
+    paramsEl.innerHTML = params;
+    console.log(paramsEl);
+    this.innerContent.appendChild(paramsEl);
+  }
+
   get state(){
 
-    var activationOffsetY = window.innerHeight/2;
+    var activationOffsetY = window.innerHeight;
 
     if(this.lastState) {
       if ( this.top >= window.innerHeight || this.bot < 0 ){
@@ -86,10 +96,22 @@ export class LightContainer{
       var deltaY = this.getDeltaScroll();
       this.doParallax(deltaY);
     }
+    if(this.state && this.type.blur){
+      var deltaY = this.getDeltaScroll();
+      this.doBlur( deltaY );
+    }
+
     this.lastScrollPos = window.scrollY;
   }
 
-  //parallax
+
+  // on scroll
+  doBlur(delta){
+    for (var i = 0; i < this.imgs.length; i++) {
+      var img = this.imgs[i];
+      img.doBlur( delta );
+    }
+  }
   doParallax( delta ){
     for (var i = 0; i < this.imgs.length; i++) {
       var img = this.imgs[i];
@@ -99,6 +121,7 @@ export class LightContainer{
   getDeltaScroll(){
     return ( this.contentHalf - this.scrollHalf ) / this.el.offsetHeight ;
   }
+
 
   /* GET CONTAINER's */
   get top(){
@@ -222,6 +245,7 @@ export class LightContainer{
     var imgsLoad = 0;
     if(this.innerContent) this.createDataObject(this.innerContent);
     var self = this;
+
     for (var i = 0; i < imgs.length; i++) {
       var img = imgs[i];
       img.src = img.getAttribute('data-src');
@@ -235,7 +259,7 @@ export class LightContainer{
         this.scale = newWidth / self.maxSize;
 
         this.newWidth = newWidth;
-        this.newHeight = self.maxSize;
+        this.newHeight = 0;
         if( imgs.length - imgsLoad <= 0) self.processFill(imgs);
       });
     }
@@ -265,12 +289,16 @@ export class LightContainer{
   placeObject(img){
     var it = 0;
 
+    var natW = img.width;
+    var natH = img.height;
+
     while(1){
       var newPosX = Math.random() * ( this.el.offsetWidth - img.newWidth ) ;
       var newPosY = Math.random() * ( this.el.offsetHeight - img.newHeight ) ;
       var obj = { x: newPosX, y: newPosY, width: img.newWidth, height: img.newHeight } ;
       var checkCollRes = this.checkCollItems(obj, this.dataImgs);
       if(!checkCollRes) {
+
         this.createImg(img, newPosX/this.el.offsetWidth*100, newPosY/this.el.offsetHeight*100, img.newWidth, img.newHeight);
         it = 0;
         return false;
@@ -328,8 +356,11 @@ export class LightContainer{
     var imgx = x || dataAnim.x || Math.random()*100;
     var imgy = y || dataAnim.y || Math.random()*100;
 
+    img.width = width;
     img.height = height || 100;
-    img.width = width || 100;
+
+
+
 
     var newLightImg  = new LightImg(img, imgx, imgy, dataAnim);
 
@@ -337,10 +368,13 @@ export class LightContainer{
 
     if(img.loaded) img.classList.add('loaded');
 
+
     // this.createDataObject(newLightImg.container);
     var x = utils.perToRatio(newLightImg.x) * this.el.offsetWidth;
     var y = utils.perToRatio(newLightImg.y) * this.el.offsetHeight;
+
     var imgActivePos = {offsetLeft: x, offsetTop: y, offsetWidth:  width, offsetHeight: height };
+
     this.createDataObject(imgActivePos);
   }
 

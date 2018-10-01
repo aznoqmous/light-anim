@@ -14,7 +14,7 @@
       body{
         width: 100vw;
         overflow-x: hidden;
-        background: #eee;
+        background: white;
         font-family: arial;
       }
       .container {
@@ -63,11 +63,24 @@
   <body>
     <!-- TEST HOME FULLSCREEN -->
     <div class="fullscreen">
-      <div class="light-container" style="width: 100vw; height: 100vh" data-src="res/svgs/img" data-num="50" data-max="50"
-      data-anim="reload fromBoth parallax duration:4">
+      <div class="light-container" style="width: 100vw; height: 100vh" data-src="res/svgs/img" data-num="32" data-max="44"
+      data-anim="reload fromBoth duration:4">
         <div class="center">
           <div class="light-content">
             <h1>light-anims.js</h1>
+
+          </div>
+        </div>
+      </div>
+    </div>
+    <!-- TEST HOME FULLSCREEN -->
+    <!-- TEST HOME FULLSCREEN -->
+    <div class="fullscreen">
+      <div class="light-container" style="width: 100vw; height: 100vh" data-src="res/svgs/img" data-num="32" data-max="44"
+      data-anim="idle parallax duration:4">
+        <div class="center">
+          <div class="light-content">
+            <h2>parallax</h2>
           </div>
         </div>
       </div>
@@ -76,20 +89,20 @@
 
     <div class="container" style="width: 100vw; display: flex">
       <div class="light-container" style="width: 50vw; height: 50vh"
-      data-src="res/svgs/img" data-num="10" data-max="32"
+      data-src="res/svgs/img" data-num="30" data-max="44"
       data-anim="orbit reload fromCenter toContentBorder duration:1">
         <div class="center">
           <div class="light-content" class="center">
-            <img style="height: 50vh; max-height: 600px; width: auto;" src="res/product.png" alt="">
+            <img style="height: 50vh; max-height: 600px; width: auto;" src="res/products/product0.png" alt="">
             <h2 style="width: 100%; text-align: center; text-shadow: 0 0 5px white; padding: 10px;"> Animation duration 1s </h2>
           </div>
         </div>
       </div>
-      <div class="light-container" style="width: 50vw; height: 50vh" data-src="res/svgs/img" data-num="10" data-max="32"
+      <div class="light-container" style="width: 50vw; height: 50vh" data-src="res/svgs/img" data-num="30" data-max="44"
       data-anim="parallax reload fromCenter toContentBorder duration:2">
         <div class="center">
           <div class="light-content">
-            <img style="height: 50vh; max-height: 600px; width: auto;" src="res/product.png" alt="">
+            <img style="height: 50vh; max-height: 600px; width: auto;" src="res/products/product1.png" alt="">
             <h2 style="width: 100%; text-align: center; text-shadow: 0 0 5px white; padding: 10px;"> Animation duration 2s </h2>
           </div>
         </div>
@@ -97,7 +110,7 @@
     </div>
 
     <div class="container">
-      <div class="light-container" style="width: 100vw; height: 50vh" data-src="res/svgs/img" data-num="10" data-max="32" data-anim="reload rotate fromLeft">
+      <div class="light-container" style="width: 100vw; height: 50vh" data-src="res/svgs/img" data-num="30" data-max="44" data-anim="reload rotate fromLeft">
         <div class="center">
           <div class="light-content">
             <h2>Images from fromleft</h2>
