@@ -43,7 +43,7 @@ export class LightImg{
     this.imgTransition = 'opacity 3s ease';
     this.imgBlur = 'blur(0px)';
 
-    this.init();
+    // this.init();
 
   }
 
@@ -57,7 +57,13 @@ export class LightImg{
 
     this.img.style.transition = this.imgTransition;
 
-    
+    this.img.style.width = '100%';
+    this.img.style.height = 'auto';
+
+    console.log(this.container);
+
+    if( !this.container.offsetWidth ) this.container.style.width = 100+'px';
+    if( !this.container.offsetHeight ) this.container.style.height = 100+'px';
 
     // MOVE TYPES
     if( this.type.fromAround )      this.initAround();
