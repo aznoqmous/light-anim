@@ -3,6 +3,10 @@ export function parsePxInt(sizePx){
   return parseInt(sizePx.replace('px', ''));
 }
 
+export function pxToPer(sizePx, ref){
+  return sizePx / ref * 100;
+}
+
 export function randGate(min, max){
   return Math.random() * (max - min) + min;
 }
@@ -37,4 +41,11 @@ export function signOf(val){
 
 export function getStyle(el, style){
   return window.getComputedStyle(el).getPropertyValue(style);
+}
+
+export function getDist(a, b){
+  var distx = Math.abs(a.x - b.x);
+  var disty = Math.abs(a.y - b.y);
+  var dist = Math.sqrt( distx * distx + disty * disty );
+  return dist;
 }

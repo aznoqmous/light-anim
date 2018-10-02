@@ -71,10 +71,9 @@ export class LightImg{
     else if( this.type.fromCenter ) this.initCenter();
     else  this.initIdle();
 
-
-
     if(this.type.toContentBorder) this.containerTransform = 'translate(-50%, -50%)';
 
+    // INIT BEHAVIOUR
     if( this.type.blur ) this.initBlur();
     if( !this.type.nowander ) this.initWander();
     if( this.type.rotate ) this.initRotate();
@@ -82,6 +81,7 @@ export class LightImg{
     if( this.type.parallax ) this.initParallax();
     if( this.type.orbit ) this.initOrbit();
 
+    // AFTER POS OFF IS SET (fromX Methods)
     this.container.style.transform = this.containerTransform;
     this.container.style.transition = this.containerTransition;
 
@@ -91,7 +91,11 @@ export class LightImg{
   }
 
   get containerTransition(){
-    return 'all '+ this.containerDuration +'s ease-out';
+    var offPos =  { x: this.offX, y: this.offY };
+    var max = 100;
+    if(this.type.fromBoth) max = 50;
+    var modifier = utils.getDist(this, offPos) / max;
+    return 'all '+ this.containerDuration * modifier +'s ease-out';
   }
 
   initIdle(){
@@ -99,16 +103,16 @@ export class LightImg{
     this.offY = this.y;
   }
   initLeft(){
-    this.offX  = 'calc(0% - '+this.img.width+'px)';
+    this.offX  = -utils.pxToPer(this.img.offsetWidth, window.innerWidth);
     this.offY = this.y;
   }
   initRight(){
-    this.offX = '100%';
+    this.offX = 100;
     this.offY = this.y;
   }
   initCenter(){
-    this.offX = '50%';
-    this.offY = '50%';
+    this.offX = 50;
+    this.offY = 50;
   }
   initRotate(){
     this.containerTransform += 'rotate('+Math.floor(Math.random()*360)+'deg)';
@@ -118,8 +122,8 @@ export class LightImg{
   }
   initBoth(){
     this.offY = this.y;
-    if( parseInt(this.x) < 50 ) this.offX = 'calc(0% - '+this.img.width+'px)';
-    else this.offX = '100%';
+    if( parseInt(this.x) < 50 ) this.offX =  -utils.pxToPer(this.img.offsetWidth, window.innerWidth);
+    else this.offX = 100;
   }
   initAround(){
     var x = utils.perToRatio(this.x) - 0.5;
@@ -204,6 +208,10 @@ export class LightImg{
     }, this.containerDuration*1000);
   }
 
+  applyOffPos(){
+    this.container.style.left = this.offX+"%";
+    this.container.style.top = this.offY+"%";
+  }
   applyActivePos(){
     var y = this.y;
     if( this.parallax ) y += this.parallaxY;
@@ -215,9 +223,9 @@ export class LightImg{
     this.container.style.top = this.container.offsetTop + y;
   }
 
-
   initPos(){
-    this.container.style.left = this.offX;
-    this.container.style.top = this.offY;
+    // how useful
+    this.applyOffPos();
   }
+
 }
