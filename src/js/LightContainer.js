@@ -57,7 +57,7 @@ export class LightContainer{
   //debug mode
   doDebug(){
     this.displayParams();
-    this.displayContentBorders();
+    // this.displayContentBorders();
   }
   displayParams(){
     var paramsEl = document.createElement('h2');
@@ -126,7 +126,7 @@ export class LightContainer{
     }
   }
   getDeltaScroll(){
-    return ( this.contentHalf - this.scrollHalf ) / this.el.offsetHeight + 1;
+    return ( this.contentHalf - this.scrollHalf ) / this.el.offsetHeight;
   }
 
   /* GET CONTAINER's */
@@ -134,10 +134,10 @@ export class LightContainer{
     return this.el.offsetTop - window.scrollY;
   }
   get bot(){
-    return this.el.offsetTop + this.el.clientHeight - window.scrollY;
+    return this.top + this.el.offsetHeight;
   }
   get half(){
-    return this.top + this.el.innerHeight / 2;
+    return this.top + this.el.offsetHeight / 2;
   }
 
   get contentTop(){
@@ -147,11 +147,15 @@ export class LightContainer{
     return this.contentTop + this.innerContent.offsetHeight;
   }
   get contentHalf(){
-    return this.contentTop + this.innerContent.offsetHeight / 2;
+    return this.el.offsetTop + this.innerContent.offsetTop +this.innerContent.offsetHeight / 2;
   }
 
   get scrollHalf(){
     return window.scrollY + window.innerHeight / 2;
+  }
+
+  get delta(){
+
   }
 
   getFromDom(){
