@@ -3,11 +3,10 @@ A js framework to anim-them-all.
 
 See examples [here](https://aznoqmous.github.io/light-anim/index.html).
 
-### upcoming features
-
-#### Upcoming features
+### Upcoming features
 - [x] **LightImg** - Recalculate img-container transition individually
 - [x] Fix parallax behaviour
+- [ ] **LightContainer** - Handle light-figures in a separate html block
 - [ ] **LightContainer** - Add multiple loader element
 
 
