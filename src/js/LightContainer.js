@@ -5,7 +5,7 @@ import {LightImg} from './LightImg.js';
 export class LightContainer{
 
   constructor(el){
-    this.startT = Date.now();
+
     this.el = el;
     this.ratio = this.el.offsetWidth / this.el.offsetHeight;
     this.innerContent = this.el.getElementsByClassName('light-content')[0];
@@ -20,10 +20,11 @@ export class LightContainer{
   }
 
   init(){
+    this.startT = Date.now();
     var imgs = [];
     var dataAnim = this.el.getAttribute('data-anim') || '';
     this.type = utils.stringToObj(dataAnim);
-    console.log(this.type);
+
     // LOAD DOM IMGS FIRST
     var imgsFromDom = this.getFromDom();
     if(imgsFromDom.length){
@@ -40,12 +41,12 @@ export class LightContainer{
     }
 
     /* IF MODE ARGS */
-    if( this.type.debug || config.DEBUG ) this.displayParams();
+    if( this.type.debug || config.DEBUG ) this.doDebug();
 
     if(this.type.orbit) this.initOrbit();
 
     if( this.type.toContentBorder ) this.initToContentBorder(imgs);
-    else this.initFill(imgs);
+    else this.initToFill(imgs);
     /* END MODE IF ARGS */
 
     // TOGGLE IF VISIBLE
@@ -53,13 +54,20 @@ export class LightContainer{
     this.toggleState();
   }
 
+  //debug mode
+  doDebug(){
+    this.displayParams();
+    // this.displayContentBorders();
+  }
   displayParams(){
     var paramsEl = document.createElement('h2');
     var params = this.el.getAttribute('data-anim').replace('debug', '');
     paramsEl.classList.add('light-debug');
     paramsEl.innerHTML = params;
-    console.log(paramsEl);
     this.innerContent.appendChild(paramsEl);
+  }
+  displayContentBorders(){
+    this.innerContent.style.border = '1px solid red';
   }
 
   get state(){
@@ -104,7 +112,6 @@ export class LightContainer{
     this.lastScrollPos = window.scrollY;
   }
 
-
   // on scroll
   doBlur(delta){
     for (var i = 0; i < this.imgs.length; i++) {
@@ -119,19 +126,18 @@ export class LightContainer{
     }
   }
   getDeltaScroll(){
-    return ( this.contentHalf - this.scrollHalf ) / this.el.offsetHeight ;
+    return ( this.contentHalf - this.scrollHalf ) / this.el.offsetHeight;
   }
-
 
   /* GET CONTAINER's */
   get top(){
     return this.el.offsetTop - window.scrollY;
   }
   get bot(){
-    return this.el.offsetTop + this.el.clientHeight - window.scrollY;
+    return this.top + this.el.offsetHeight;
   }
   get half(){
-    return this.top + this.el.innerHeight / 2;
+    return this.top + this.el.offsetHeight / 2;
   }
 
   get contentTop(){
@@ -141,11 +147,15 @@ export class LightContainer{
     return this.contentTop + this.innerContent.offsetHeight;
   }
   get contentHalf(){
-    return this.contentTop + this.innerContent.offsetHeight / 2;
+    return this.el.offsetTop + this.innerContent.offsetTop +this.innerContent.offsetHeight / 2;
   }
 
   get scrollHalf(){
     return window.scrollY + window.innerHeight / 2;
+  }
+
+  get delta(){
+
   }
 
   getFromDom(){
@@ -157,7 +167,7 @@ export class LightContainer{
     if( !max ) max = val;
     else max = parseInt(max);
 
-    console.log(pre, val, max);
+    console.log('Loading from data', pre, val, max);
 
     var imgsEl = [];
     var arrImgsIndex = [];
@@ -221,15 +231,19 @@ export class LightContainer{
       var img = imgs[i];
       var imgx = x + Math.sin( 2*th*i + thOffset ) * width  /2 ;
       var imgy = y + Math.cos( 2*th*i + thOffset ) * height /2 ;
-      if(imgx > 0 && imgx < 100 && imgy > 0 && imgy < 100){
-        this.createImg(img, imgx, imgy);
-      }
+      // if(imgx > 0 && imgx < 100 && imgy > 0 && imgy < 100){
+      //    this.createImg(img, imgx, imgy);
+      // }
+      this.createImg(img, imgx, imgy);
+      // this.initImg( img, imgx, imgy, 100, 100);
 
     }
   }
   initOrbit(){
     this.el.style['animation-name'] = 'infiniteRotate';
     this.innerContent.style['animation-name'] = 'infiniteCounterRotate';
+    this.orbitDuration = window.getComputedStyle(this.el).getPropertyValue('animation-duration');
+    console.log(this.orbitDuration);
   }
 
   //display img to contents border
@@ -237,36 +251,43 @@ export class LightContainer{
     var width = this.innerContent.offsetWidth / this.el.offsetWidth * 100;
     var height = this.innerContent.offsetHeight / this.el.offsetHeight * 100;
     this.initArc( imgs, 50, 50, width, height);
+
   }
 
   //display imgs so they fill and avoid touching
-  initFill(imgs){
+  initToFill(imgs){
+    this.imgLoads = 0;
+    this.imgsToLoad = imgs.length;
+    this.loadedImgs = [];
     this.failedFill = [];
-    var imgsLoad = 0;
+
     if(this.innerContent) this.createDataObject(this.innerContent);
-    var self = this;
 
     for (var i = 0; i < imgs.length; i++) {
       var img = imgs[i];
-      img.src = img.getAttribute('data-src');
-      img.addEventListener('load', function(){
-        imgsLoad++;
-        this.loaded = true;
 
-        var  newWidth = (self.maxSize + self.minSize) /2;
-        if(!self.type.scale) newWidth = (Math.random() * (self.maxSize - self.minSize) + self.minSize);
+      this.loadImgForFill(img);
 
-        this.scale = newWidth / self.maxSize;
-
-        this.newWidth = newWidth;
-        this.newHeight = 0;
-        if( imgs.length - imgsLoad <= 0) self.processFill(imgs);
-      });
     }
   }
-  processFill(imgs){
-    console.log(Date.now() - this.startT +'ms');
-    imgs = this.sortImgs(imgs);
+  loadImgForFill(img){
+    var self = this;
+
+    img.style.width = 100+'px';
+    img.style.height = 'auto';
+
+    img.addEventListener('load', function(){
+      self.imgLoads++;
+      this.loaded = true;
+      self.loadedImgs.push(this);
+      self.createImg( this );
+      if( self.imgsToLoad - self.imgLoads <= 0) self.processFill();
+    });
+    img.src = img.getAttribute('data-src');
+  }
+  processFill(){
+    console.log('Place imgs', Date.now() - this.startT +'ms');
+    var imgs = this.sortImgs(this.imgs);
     for (var i = 0; i < imgs.length; i++) {
       var img = imgs[i];
       this.placeObject(img);
@@ -283,23 +304,37 @@ export class LightContainer{
     }
   }
   createDataObject(el){
-    var obj = {x: el.offsetLeft, y: el.offsetTop, width: el.offsetWidth, height: el.offsetHeight};
+    var obj = {x: el.offsetLeft, y: el.offsetTop, width: el.offsetWidth || el.width, height: el.offsetHeight || el.height};
     this.dataImgs.push(obj);
   }
   placeObject(img){
     var it = 0;
+    var rect = img.img.getBoundingClientRect();
 
-    var natW = img.width;
-    var natH = img.height;
+    var ratio = img.img.offsetWidth / img.img.offsetHeight;
 
     while(1){
-      var newPosX = Math.random() * ( this.el.offsetWidth - img.newWidth ) ;
-      var newPosY = Math.random() * ( this.el.offsetHeight - img.newHeight ) ;
-      var obj = { x: newPosX, y: newPosY, width: img.newWidth, height: img.newHeight } ;
+
+      var newWidth = Math.random() * (config.MAX_SIZE - config.MIN_SIZE) + config.MIN_SIZE;
+      var newHeight = newWidth / ratio;
+
+      var newPosX = Math.random() * ( this.el.offsetWidth - newWidth ) ;
+      var newPosY = Math.random() * ( this.el.offsetHeight - newHeight ) ;
+
+      // console.log(newPosX, newPosY, newWidth, newHeight);
+
+      var obj = { x: newPosX, y: newPosY, width: newWidth, height: newHeight } ;
       var checkCollRes = this.checkCollItems(obj, this.dataImgs);
+
       if(!checkCollRes) {
 
-        this.createImg(img, newPosX/this.el.offsetWidth*100, newPosY/this.el.offsetHeight*100, img.newWidth, img.newHeight);
+        var imgActivePos = {offsetLeft: newPosX, offsetTop: newPosY, offsetWidth:  newWidth, offsetHeight: newHeight };
+
+
+        this.initImg(img, newPosX, newPosY, newWidth, newHeight);
+
+        this.createDataObject(imgActivePos);
+
         it = 0;
         return false;
       }
@@ -330,15 +365,11 @@ export class LightContainer{
       }
   }
 
-  createImg(img, x, y, width, height){
-    img.classList.add('light-img');
+  createImg(img, x, y){
 
-    if(!img.src) {
-      img.addEventListener('load', function(){
-        this.loaded = true;
-      });
-      img.src = img.getAttribute('data-src');
-    }
+    img.classList.add('light-img');
+    var self = this;
+
 
     var container = document.createElement('figure');
     container.classList.add('light-figure');
@@ -356,11 +387,6 @@ export class LightContainer{
     var imgx = x || dataAnim.x || Math.random()*100;
     var imgy = y || dataAnim.y || Math.random()*100;
 
-    img.width = width;
-    img.height = height || 100;
-
-
-
 
     var newLightImg  = new LightImg(img, imgx, imgy, dataAnim);
 
@@ -368,14 +394,27 @@ export class LightContainer{
 
     if(img.loaded) img.classList.add('loaded');
 
+    if(!img.src) {
+      img.addEventListener('load', function(){
+        this.loaded = true;
+        newLightImg.init();
+      });
+      img.src = img.getAttribute('data-src');
+    }
 
-    // this.createDataObject(newLightImg.container);
-    var x = utils.perToRatio(newLightImg.x) * this.el.offsetWidth;
-    var y = utils.perToRatio(newLightImg.y) * this.el.offsetHeight;
-
-    var imgActivePos = {offsetLeft: x, offsetTop: y, offsetWidth:  width, offsetHeight: height };
-
-    this.createDataObject(imgActivePos);
   }
+  initImg(img, newPosX, newPosY, newWidth, newHeight){
+
+    img.container.style.width = newWidth+'px' || 100;
+    img.container.style.height = newHeight+'px' || 100;
+
+    if( newPosX ) img.x = newPosX / this.el.offsetWidth * 100;
+    if( newPosY ) img.y = newPosY / this.el.offsetHeight * 100;
+
+    if( newWidth ) img.scale = newWidth / config.MAX_SIZE;
+
+    img.init();
+  }
+
 
 }

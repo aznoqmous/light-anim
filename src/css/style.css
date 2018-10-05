@@ -11,15 +11,14 @@ body{
   opacity: 1;
 }
 .light-container > img{
-  opacity: 0;
-  display: none;
-}
-.light-container img{
   pointer-events: none;
   user-select: none;
   opacity: 0;
 }
-.light-container img.active{
+.light-container > figure img{
+  opacity: 0;
+}
+.light-container > figure img.active{
   opacity: 1;
 }
 .light-figure{
@@ -29,7 +28,6 @@ body{
 
 .light-img{
   transition: opacity 3s ease;
-  animation-name: idleWander;
   animation-duration: 5s;
   animation-iteration-count: infinite;
   animation-timing-function: ease;
@@ -70,4 +68,10 @@ body{
 @keyframes infiniteCounterRotate{
   from { transform: rotate(0deg); }
   to { transform: rotate(-360deg); }
+}
+@keyframes infiniteWanderCounterRotate{
+  from { transform: rotate(0deg) translate(0px, 0px); }
+  20%{ transform: translate(10px, 5px); }
+  50%{ transform: translate(5px, 20px); }
+  to { transform: rotate(-360deg) translate(0px, 0px); }
 }
