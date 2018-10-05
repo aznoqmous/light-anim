@@ -50,7 +50,12 @@ body{
   animation-timing-function: linear;
 }
 
+.light-container.light-rotate{
+  /* overflow: hidden; */
+}
+
 .light-debug{
+  font-size: 1rem;
   position: absolute;
   max-width: 100%;
 }

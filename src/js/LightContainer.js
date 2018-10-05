@@ -46,6 +46,7 @@ export class LightContainer{
     if(this.type.orbit) this.initOrbit();
 
     if( this.type.toContentBorder ) this.initToContentBorder(imgs);
+    else if( this.type.toAroundContent ) this.initToAroundContent(imgs);
     else this.initToFill(imgs);
     /* END MODE IF ARGS */
 
@@ -239,11 +240,13 @@ export class LightContainer{
 
     }
   }
+
   initOrbit(){
+    this.el.classList.add('light-rotate');
     this.el.style['animation-name'] = 'infiniteRotate';
     this.innerContent.style['animation-name'] = 'infiniteCounterRotate';
     this.orbitDuration = window.getComputedStyle(this.el).getPropertyValue('animation-duration');
-    console.log(this.orbitDuration);
+
   }
 
   //display img to contents border
@@ -251,7 +254,19 @@ export class LightContainer{
     var width = this.innerContent.offsetWidth / this.el.offsetWidth * 100;
     var height = this.innerContent.offsetHeight / this.el.offsetHeight * 100;
     this.initArc( imgs, 50, 50, width, height);
+  }
+  initToAroundContent( imgs ){
+    var spaceWidth = (1 - this.innerContent.offsetWidth/ this.el.offsetWidth ) /2 * 100;
+    var spaceHeight = (1 - this.innerContent.offsetHeight / this.el.offsetHeight ) /2 * 100;
+    var width = this.innerContent.offsetWidth/ this.el.offsetWidth * 100;
+    var height = this.innerContent.offsetHeight/ this.el.offsetHeight * 100;
 
+    var size = 0;
+
+    if( width > height ) size = width + spaceWidth ;
+    else size = height + spaceHeight ;
+
+    this.initArc( imgs, 50, 50, size, size);
   }
 
   //display imgs so they fill and avoid touching

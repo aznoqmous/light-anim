@@ -9,7 +9,7 @@
 
     <style media="screen">
       /* STYLES AUTRES  */
-      * { box-sizing: border-box; padding: 0; margin: 0; color: #474747; }
+      * { box-sizing: border-box; padding: 0; margin: 0; }
 
       body{
         width: 100vw;
@@ -22,8 +22,12 @@
         margin: 25vh 0;
         min-height: 50vh;
       }
-      p{
-        width: 600px;
+      p, span{
+        line-height: 1.8em;
+        font-size: 2rem;
+      }
+      span{
+        color: #ddd;
       }
       .fullscreen {
         height: 100vh
@@ -39,10 +43,7 @@
       .bottom{
         justify-content: flex-end;
       }
-      /* logo */
-      .light-content{
-        max-width: calc(100vw - 100px);
-      }
+
       .light-content .logo{
         width: 20vw;
         min-width: 600px;
@@ -50,7 +51,14 @@
         opacity: 1;
       }
       .light-content{
+        max-width: 600px;
         padding: 20px
+      }
+      h1{ color: white; background: #474747; padding: 5px 10px; display: inline-block; border-radius: 5px}
+      h2{ color: #474747;}
+      p{ color: #666666; }
+      h2{
+        font-size: 4rem;
       }
     </style>
   </head>
@@ -65,6 +73,8 @@
           <div class="light-content">
 
             <h1>light-anims.js</h1>
+            <h2>a light multiple-animations framework</h2>
+
           </div>
         </div>
 
@@ -78,19 +88,21 @@
       data-num="32" data-max="44"
       data-anim="parallax nowander blur duration:0">
         <div class="center">
-          <div class="light-content">
+          <div class="light-content" max-width="600px">
             <h1>light-anims.js</h1>
+            <h2>let you handle lots of images</h2>
             <p >
-              Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.
-              Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.
-              Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur.
-              Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.
+              By passing a src/pattern, you can easily make use of hundreds of images. <br>
+              LightAnim will render a new pattern every time you load the page, according to content you want to dodge and screensize.
             </p>
+            <span>( try it by pressing F5 )</span>
           </div>
         </div>
       </div>
     </div>
     <!-- TEST HOME FULLSCREEN -->
+
+
 
     <!-- TEST ORBIT -->
     <div class="container" style="width: 100vw; display: flex">
@@ -114,6 +126,22 @@
       </div>
     </div>
     <!-- TEST ORBIT -->
+
+    <div class="fullscreen">
+      <div class="light-container" style="width: 100vw; height: 100vh" data-src="res/svgs/img"
+      data-num="16" data-max="44"
+      data-anim="fromBoth toAroundContent orbit duration:3">
+        <div class="center">
+          <div class="light-content" max-width="600px">
+            <h1>light-anims.js</h1>
+            <h2>animations combo !</h2>
+            <p>
+              Combo properties give you access to unlimited animation power
+            </p>
+          </div>
+        </div>
+      </div>
+    </div>
 
   </body>
 </html>
