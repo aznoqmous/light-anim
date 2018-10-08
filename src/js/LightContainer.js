@@ -105,11 +105,18 @@ export class LightContainer{
     if(this.state && !this.inited) this.init();
 
     var currentState = this.state;
-    for (var i = 0; i < this.imgs.length; i++) {
-      var img = this.imgs[i];
-      if(this.state) img.setActive();
-      else img.setOff();
+    if(this.state){
+      for (var i = 0; i < this.imgs.length; i++) {
+        var img = this.imgs[i];
+         img.setActive();
+      }
+    }else{
+      for (var i = 0; i < this.imgs.length; i++) {
+          var img = this.imgs[i];
+          img.setOff();
+      }
     }
+
 
     if(this.state && this.type.parallax) {
       var deltaY = this.getDeltaScroll();
