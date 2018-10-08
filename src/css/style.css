@@ -31,6 +31,20 @@ body{
   height: 100%;
   display: block;
 }
+.light-container .light-img-container.debug{
+  border: 1px solid red;
+}
+.light-container .light-img-container.debug:after{
+  position: absolute;
+  content: "";
+  left: calc(50% - 5px);
+  top: calc(50% - 5px);
+  border-radius: 50%;
+  background: red;
+  height: 10px;
+  width: 10px;
+  z-index: 100;
+}
 .light-container .light-img-container > div{
   position: relative;
   width: 100%;

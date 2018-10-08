@@ -6,6 +6,9 @@ export function parsePxInt(sizePx){
 export function pxToPer(sizePx, ref){
   return sizePx / ref * 100;
 }
+export function perToPx(sizePer, ref){
+  return sizePer / 100 * ref;
+}
 
 export function randGate(min, max){
   return Math.random() * (max - min) + min;

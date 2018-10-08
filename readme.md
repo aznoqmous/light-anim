@@ -8,7 +8,7 @@ See examples [here](https://aznoqmous.github.io/light-anim/index.html).
 - [x] Fix parallax behaviour
 - [x] **LightContainer** - Handle light-figures in a separate html block
 - [ ] **LightContainer** - Add multiple loader element
-
+- [ ] **LightContainer** - Improve toAroundContent 
 
 
 _&copy; Paul LANDREAU 2018_

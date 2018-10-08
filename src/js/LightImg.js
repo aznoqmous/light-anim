@@ -71,7 +71,7 @@ export class LightImg{
     else if( this.type.fromCenter ) this.initCenter();
     else  this.initIdle();
 
-    if(this.type.toContentBorder) this.containerTransform = 'translate(-50%, -50%)';
+    if(this.type.toContentBorder || this.type.toAroundContent) this.containerTransform = 'translate(-50%, -50%)';
 
     // INIT BEHAVIOUR
     if( this.type.blur ) this.initBlur();
