@@ -17,9 +17,19 @@ export class LightContainer{
     this.maxSize = 200;
     this.lastState = 0;
     this.toggleState();
-  }
 
+  }
+  initImgContainer(){
+    var wrapper = document.createElement('div');
+    wrapper.classList.add('light-img-container');
+    var inside = document.createElement('div');
+    wrapper.appendChild(inside);
+    this.el.appendChild(wrapper);
+
+    this.imgContainer = inside;
+  }
   init(){
+    this.initImgContainer();
     this.startT = Date.now();
     var imgs = [];
     var dataAnim = this.el.getAttribute('data-anim') || '';
@@ -243,8 +253,8 @@ export class LightContainer{
 
   initOrbit(){
     this.el.classList.add('light-rotate');
-    this.el.style['animation-name'] = 'infiniteRotate';
-    this.innerContent.style['animation-name'] = 'infiniteCounterRotate';
+    this.imgContainer.style['animation-name'] = 'infiniteRotate';
+    // this.innerContent.style['animation-name'] = 'infiniteCounterRotate';
     this.orbitDuration = window.getComputedStyle(this.el).getPropertyValue('animation-duration');
 
   }
@@ -389,7 +399,7 @@ export class LightContainer{
     var container = document.createElement('figure');
     container.classList.add('light-figure');
 
-    this.el.appendChild(container);
+    this.imgContainer.appendChild(container);
     container.appendChild(img);
 
     // GET ANIM DATAS
