@@ -107,8 +107,8 @@ export class LightContainer{
     var currentState = this.state;
     for (var i = 0; i < this.imgs.length; i++) {
       var img = this.imgs[i];
-      if(this.state && img.setActive) img.setActive();
-      else if (img.setOff) img.setOff();
+      if(this.state) img.setActive();
+      else img.setOff();
     }
 
     if(this.state && this.type.parallax) {

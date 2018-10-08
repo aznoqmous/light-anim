@@ -9,7 +9,7 @@ export class LightAnim{
     this.bindEvt();
 
   }
- 
+
   init(){
     var containers = document.getElementsByClassName(this.selector);
     for (var i = 0; i < containers.length; i++) {
@@ -38,5 +38,6 @@ export class LightAnim{
   }
 
 }
-
-new LightAnim();
+document.addEventListener('DOMContentLoaded', function(){
+  new LightAnim();
+});

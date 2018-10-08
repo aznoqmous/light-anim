@@ -6,19 +6,28 @@ import * as utils from './utils.js';
 
   types :
     {
-    idle: false,
-    scroll: false,
-    fromLeft: false,
-    fromRight: false,
-    fromBoth: false,
-    toContentBorder: false,
+    FROM :
+      idle: true,
+      fromLeft: false,
+      fromRight: false,
+      fromBoth: false,
+
+    TO:
+      toFill: true,
+      toContentBorder: false,
+      toAroundContent: false,
+
+    ACTIVE ANIMATION:
+      wander: false,
+
+    rain: false,
     parallax: false,
     scale: false,
     blur: false,
     rotate: false,
     rotateinf: false,
     reload: false,
-    duration:
+    duration: false
   }
 */
 export class LightImg{
@@ -53,8 +62,6 @@ export class LightImg{
 
     this.container.style['animation-duration'] = Math.random()*5+5+'s';
 
-    if( ! this.type.orbit ) this.img.style['animation-duration'] = Math.random()*5+5+'s';
-
     this.img.style.transition = this.imgTransition;
 
     this.img.style.width = '100%';
@@ -66,16 +73,23 @@ export class LightImg{
     // INIT FROM
     if( this.type.fromAround )      this.initAround();
     else if( this.type.fromBoth )   this.initBoth();
+    else if( this.type.fromTop )   this.initTop();
+    else if( this.type.fromBottom )   this.initBottom();
     else if( this.type.fromLeft )   this.initLeft();
     else if( this.type.fromRight )  this.initRight();
     else if( this.type.fromCenter ) this.initCenter();
     else  this.initIdle();
 
-    if(this.type.toContentBorder || this.type.toAroundContent) this.containerTransform = 'translate(-50%, -50%)';
+    if(  this.type.toContentBorder
+      || this.type.toAroundContent
+      || this.type.fromCenter ) this.containerTransform = 'translate(-50%, -50%)';
+
+
 
     // INIT BEHAVIOUR
+    if(this.type.rain) this.initRain();
     if( this.type.blur ) this.initBlur();
-    if( !this.type.nowander ) this.initWander();
+    if( this.type.wander ) this.initWander();
     if( this.type.rotate ) this.initRotate();
     if( this.type.rotateinf ) this.initRotateInf();
     if( this.type.parallax ) this.initParallax();
@@ -83,7 +97,7 @@ export class LightImg{
 
     // AFTER POS OFF IS SET (fromX Methods)
     this.container.style.transform = this.containerTransform;
-    this.container.style.transition = this.containerTransition;
+    this.container.style['transition-duration'] = this.containerDuration;
 
     this.setOff();
     this.initPos();
@@ -102,13 +116,26 @@ export class LightImg{
     this.offX = this.x;
     this.offY = this.y;
   }
+  initTop(){
+    this.offY = -utils.pxToPer(this.img.offsetHeight * 2, window.innerHeight);
+    this.offX = this.x;
+  }
+  initBottom(){
+    this.offY = 100;
+    this.offX = this.x;
+  }
   initLeft(){
-    this.offX  = -utils.pxToPer(this.img.offsetWidth, window.innerWidth);
+    this.offX  = -utils.pxToPer(this.img.offsetWidth * 2, window.innerWidth);
     this.offY = this.y;
   }
   initRight(){
     this.offX = 100;
     this.offY = this.y;
+  }
+  initBoth(){
+    this.offY = this.y;
+    if( parseInt(this.x) < 50 ) this.offX =  -utils.pxToPer(this.img.offsetWidth, window.innerWidth);
+    else this.offX = 100;
   }
   initCenter(){
     this.offX = 50;
@@ -116,15 +143,12 @@ export class LightImg{
   }
   initRotate(){
     this.containerTransform += 'rotate('+Math.floor(Math.random()*360)+'deg)';
+    this.img.style.transition = this.containerTransition;
   }
   initRotateInf(){
     this.container.style['animation-name'] = 'infiniteRotate';
   }
-  initBoth(){
-    this.offY = this.y;
-    if( parseInt(this.x) < 50 ) this.offX =  -utils.pxToPer(this.img.offsetWidth, window.innerWidth);
-    else this.offX = 100;
-  }
+
   initAround(){
     var x = utils.perToRatio(this.x) - 0.5;
     var y = utils.perToRatio(this.y) - 0.5;
@@ -141,8 +165,14 @@ export class LightImg{
 
   }
 
+  initRain(){
+    var delay = Math.floor( Math.random() * this.scale * this.baseDuration * 10 ) / 10;
+    this.rainDelay = delay * 1000;
+  }
+
   initWander(){
     this.img.style['animation-name'] = 'idleWander';
+    this.img.style['animation-duration'] = Math.floor((Math.random()*5+5)*10)/10+'s';
   }
   initOrbit(){
     var duration = utils.getStyle(this.parent, 'animation-duration');
@@ -175,19 +205,30 @@ export class LightImg{
   }
 
   setActive(){
+    this.img.classList.add('active');
     this.container.style.transition = this.containerTransition;
     this.img.style.transition = this.imgTransition;
+
+    var self = this;
+
+    if(this.type.rain) {
+      setTimeout(function(){
+        self.img.classList.add('active');
+        self.applyActivePos();
+      }, this.rainDelay);
+      // setTimeout(function(){
+      //   self.onActive();
+      // }, this.containerDuration*1000 + this.rainDelay);
+      return true;
+    }
+
 
     this.applyActivePos();
 
 
-    this.img.classList.add('active');
-
-    var self = this;
-    setTimeout(function(){
-      self.containerDuration = 0;
-      self.container.style.transition = self.containerTransition;
-    }, this.containerDuration*1000);
+    // setTimeout(function(){
+    //   self.onActive();
+    // }, this.containerDuration*1000);
   }
 
   setOff(){
@@ -198,14 +239,23 @@ export class LightImg{
     if(this.type.parallax) this.parallaxY = 0;
 
     if(this.type.blur) this.img.style.filter = 'blur(0px)';
-    this.img.classList.remove('active');
 
-    var self = this;
-    setTimeout(function(){
-      self.containerDuration = self.baseDuration;
-      self.container.style.transition = self.containerTransition;
-      self.img.style.transition = self.imgTransition;
-    }, this.containerDuration*1000);
+    this.onOff();
+    // var self = this;
+    // setTimeout(function(){
+    //   self.onOff();
+    // }, this.containerDuration*1000);
+  }
+
+  onActive(){
+    this.containerDuration = 0;
+    this.container.style.transition = this.containerTransition;
+  }
+  onOff(){
+    this.img.classList.remove('active');
+    this.containerDuration = this.baseDuration;
+    this.container.style.transition = this.containerTransition;
+    this.img.style.transition = this.imgTransition;
   }
 
   applyOffPos(){
