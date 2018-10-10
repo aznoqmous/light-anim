@@ -19,21 +19,15 @@ export class LightContainer{
     this.toggleState();
 
   }
-  initImgContainer(){
-    var wrapper = document.createElement('div');
-    wrapper.classList.add('light-img-container');
-    var inside = document.createElement('div');
-    wrapper.appendChild(inside);
-    this.el.appendChild(wrapper);
 
-    this.imgContainer = inside;
-  }
   init(){
-    this.initImgContainer();
+
     this.startT = Date.now();
     var imgs = [];
-    var dataAnim = this.el.getAttribute('data-anim') || '';
-    this.type = utils.stringToObj(dataAnim);
+
+    this.getConfig();
+
+    this.initImgContainer();
 
     // LOAD DOM IMGS FIRST
     var imgsFromDom = this.getFromDom();
@@ -64,7 +58,25 @@ export class LightContainer{
     this.inited = true;
     this.toggleState();
   }
+  getConfig(){
+    var dataAnim = this.el.getAttribute('data-anim') || '';
+    this.type = utils.stringToObj(dataAnim);
+  }
+  initImgContainer(){
+    var wrapper = document.createElement('div');
+    wrapper.classList.add('light-img-container');
+    var inside = document.createElement('div');
+    wrapper.appendChild(inside);
+    this.el.appendChild(wrapper);
 
+    this.imgContainer = inside;
+
+    if(this.type.fullWidth){
+      wrapper.style.left = -(window.innerWidth - this.el.offsetWidth)/2+'px';
+      wrapper.style.width = '100vw';
+    }
+
+  }
   //debug mode
   doDebug(){
     this.displayParams();
