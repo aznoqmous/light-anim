@@ -64,6 +64,7 @@ export class LightContainer{
     if(!contents.length) {
       this.innerContent = document.createElement('div');
       this.innerContent.classList.add('light-content');
+      this.el.appendChild(this.innerContent);
     }else{
       this.innerContent = contents[0];
     }
