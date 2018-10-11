@@ -8,7 +8,8 @@ export class LightContainer{
 
     this.el = el;
     this.ratio = this.el.offsetWidth / this.el.offsetHeight;
-    this.innerContent = this.el.getElementsByClassName('light-content')[0];
+
+    this.getInnerContent();
     this.imgs = [];
     this.dataImgs = [];
     this.start = el.offsetTop;
@@ -57,6 +58,15 @@ export class LightContainer{
     // TOGGLE IF VISIBLE
     this.inited = true;
     this.toggleState();
+  }
+  getInnerContent(){
+    var contents = this.el.getElementsByClassName('light-content');
+    if(!contents.length) {
+      this.innerContent = document.createElement('div');
+      this.innerContent.classList.add('light-content');
+    }else{
+      this.innerContent = contents[0];
+    }
   }
   getConfig(){
     var dataAnim = this.el.getAttribute('data-anim') || '';
