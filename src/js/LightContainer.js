@@ -208,7 +208,7 @@ export class LightContainer{
         if( !max ) max = val;
         else max = parseInt(max);
 
-        console.log('Loading from data', pre, val, max);
+        if(this.type.debug) console.log('Loading from data', pre, val, max);
 
         var imgsEl = [];
         var arrImgsIndex = [];
@@ -341,14 +341,14 @@ export class LightContainer{
         img.src = img.getAttribute('data-src');
     }
     processFill(){
-        console.log('Imgs loaded in', Date.now() - this.startT +'ms');
+        if(this.type.debug) console.log('Imgs loaded in', Date.now() - this.startT +'ms');
         var startFill =  Date.now();
         var imgs = this.sortImgs(this.imgs);
         for (var i = 0; i < imgs.length; i++) {
             var img = imgs[i];
             this.placeObject(img);
         }
-        console.log('Imgs placed in', Date.now() - startFill +'ms', this.failedFill);
+        if(this.type.debug) console.log('Imgs placed in', Date.now() - startFill +'ms', this.failedFill);
         this.toggleState();
     }
     sortImgs(imgs){
