@@ -74,8 +74,8 @@ export class LightContainer{
         this.type = utils.stringToObj(dataAnim);
     }
     initImgContainer(){
-        var wrapper = document.createElement('div');
-        wrapper.classList.add('light-img-container');
+        this.wrapper = document.createElement('div');
+        this.wrapper.classList.add('light-img-container');
         var inside = document.createElement('div');
         wrapper.appendChild(inside);
         this.el.appendChild(wrapper);
@@ -481,7 +481,7 @@ export class LightContainer{
     /* EVENTS */
     bindFullWidthResize(){
       var self = this;
-      
+
       window.addEventListener('resize', function(){ self.wrapper.style.left = -this.el.offsetLeft+'px'; });
     }
 }
