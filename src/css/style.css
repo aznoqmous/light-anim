@@ -21,45 +21,42 @@ body{
 .light-container > figure img.active{
   opacity: 1;
 }
-.light-figure{
+/* .light-figure{
   position: absolute;
   animation-iteration-count: infinite;
-}
+} */
 
-.light-img{
+/* .light-img{
   transition: opacity 3s ease;
   animation-duration: 5s;
   animation-iteration-count: infinite;
   animation-timing-function: ease;
-}
+} */
 
-.light-container.active{
+/* .light-container.active{
   border: 2px solid red;
-}
+} */
 
-.light-content{
+/* .light-content{
   z-index: 100;
-}
+} */
 
 /* ORBIT BEHAVIOUR */
 
-.light-container, .light-content{
+/* .light-container, .light-content{
   transition: all 2s linear;
   animation-duration: 20s;
   animation-iteration-count: infinite;
   animation-timing-function: linear;
-}
+} */
 
-.light-container.light-rotate{
-  /* overflow: hidden; */
-}
 
-.light-debug{
+/* .light-debug{
   font-size: 1rem;
   position: absolute;
   max-width: 100%;
-}
-
+} */
+/*
 @keyframes idleWander{
   from { transform: translate(0px, 0px); }
   20%{ transform: translate(10px, 5px); }
@@ -79,4 +76,4 @@ body{
   20%{ transform: translate(10px, 5px); }
   50%{ transform: translate(5px, 20px); }
   to { transform: rotate(-360deg) translate(0px, 0px); }
-}
+} */
