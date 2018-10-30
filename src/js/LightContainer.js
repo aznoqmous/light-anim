@@ -72,24 +72,26 @@ export class LightContainer{
     getConfig(){
         var dataAnim = this.el.getAttribute('data-anim') || '';
         this.type = utils.stringToObj(dataAnim);
+        this.onload = this.el.getAttribute('data-load') || null;
     }
     initImgContainer(){
+
         this.wrapper = document.createElement('div');
         this.wrapper.classList.add('light-img-container');
-        var inside = document.createElement('div');
-        wrapper.appendChild(inside);
-        this.el.appendChild(wrapper);
+        this.imgContainer = document.createElement('div');
+        this.wrapper.appendChild(this.imgContainer);
+        this.el.appendChild(this.wrapper);
 
-        this.imgContainer = inside;
 
         if(this.type.fullWidth){
-            wrapper.style.left = -this.el.offsetLeft+'px';
+            this.wrapper.style.left = -this.el.offsetLeft+'px';
 
-            wrapper.style.width = '100vw';
+            this.wrapper.style.width = '100vw';
         }
 
     }
-    //debug mode
+
+    /* DEBUG MODE */
     doDebug(){
         this.displayParams();
         // this.displayContentBorders();
@@ -105,6 +107,7 @@ export class LightContainer{
         this.innerContent.style.border = '1px solid red';
     }
 
+    /* STATES */
     get state(){
 
         var activationOffsetY = window.innerHeight;
@@ -123,7 +126,6 @@ export class LightContainer{
         }
         return this.lastState;
     }
-
     toggleState(){
 
         if(this.state && !this.inited) this.init();
@@ -353,6 +355,9 @@ export class LightContainer{
             this.placeObject(img);
         }
         if(this.type.debug) console.log('Imgs placed in', Date.now() - startFill +'ms', this.failedFill);
+
+        this.doLoad();
+
         this.toggleState();
     }
 
@@ -484,4 +489,10 @@ export class LightContainer{
 
       window.addEventListener('resize', function(){ self.wrapper.style.left = -this.el.offsetLeft+'px'; });
     }
+
+    /* CUSTOM EVENTS */
+    doLoad(){
+      if(this.onload) eval(this.onload); //only in processFill -> to move globaly
+    }
+
 }
