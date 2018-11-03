@@ -14,6 +14,8 @@ export function randGate(min, max){
 export function stringToObj(str){
   var res = {};
   var arr = str.split(' ');
+  var str = str.replace('\n', ' ');
+  str = str.replace('  ', ' ');
   for (var i = 0; i < arr.length; i++) {
     var data = arr[i];
     var reData = data.split(':');

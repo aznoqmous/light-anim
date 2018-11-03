@@ -26,8 +26,10 @@ import * as utils from './utils.js';
     blur: false,
     rotate: false,
     rotateinf: false,
+    transformScale: false,
     reload: false,
     duration: false
+    fullWidth: false
   }
 */
 export class LightImg{
@@ -64,6 +66,8 @@ export class LightImg{
 
     this.img.style.transition = this.imgTransition;
 
+    this.containerTransition = this.calculatedContainerTransition;
+
     this.img.style.width = '100%';
     this.img.style.height = 'auto';
 
@@ -94,6 +98,7 @@ export class LightImg{
     if( this.type.rotateinf ) this.initRotateInf();
     if( this.type.parallax ) this.initParallax();
     if( this.type.orbit ) this.initOrbit();
+    if( this.type.transformScale ) this.initTransformScale();
 
     // AFTER POS OFF IS SET (fromX Methods)
     this.container.style.transform = this.containerTransform;
@@ -104,7 +109,7 @@ export class LightImg{
 
   }
 
-  get containerTransition(){
+  get calculatedContainerTransition(){
     var offPos =  { x: this.offX, y: this.offY };
     var max = 100;
     if(this.type.fromBoth) max = 50;
@@ -148,6 +153,10 @@ export class LightImg{
   initRotateInf(){
     this.container.style['animation-name'] = 'infiniteRotate';
   }
+  initTransformScale(){
+    this.container.style['transform'] = 'scale(0)';
+    this.containerTransform += 'scale(1)';
+  }
 
   initAround(){
     var x = utils.perToRatio(this.x) - 0.5;
@@ -183,6 +192,7 @@ export class LightImg{
     this.img.style['animation-iteration-count'] = iteration;
     this.img.style['animation-timing-function'] = timingfunc;
   }
+
 
   initParallax(){
     this.parallaxY = 0;
