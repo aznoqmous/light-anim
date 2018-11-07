@@ -84,25 +84,31 @@ export class LightContainer{
       this.el.appendChild(this.wrapper);
 
       if( this.type.fullWidth ){
-
-          this.wrapper.style.left = -this.el.offsetLeft+'px';
+          // console.log(this.getContainerOffsetLeft());
+          this.wrapper.style.left = -this.getContainerOffsetLeft()+'px';
 
           this.wrapper.style.width = '100vw';
+
+          this.bindFullWidthResize();
 
       }
 
   }
   getContainerOffsetLeft(){
     /* TEST PURPOSE */
-    var offsets = [];
-    var offsetX = 0;
-    var el = this.el;
-    while(el){
-      offsetX += this.el.offsetLeft;
-      offsets.push(this.el.offsetLeft);
-      el = el.parentElement;
-    }
-    console.log(this.el, offsets);
+    // var offsets = [];
+    // var offsetX = 0;
+    // var el = this.el;
+    // while(el){
+    //   offsetX += el.offsetLeft;
+    //   offsets.push(el.offsetLeft);
+    //   el = el.parentElement;
+    // }
+    // console.log(this.el, offsets);
+
+
+    var offsetX = this.el.getBoundingClientRect().left;
+    console.log(offsetX);
     return offsetX;
 
   }
@@ -522,7 +528,7 @@ export class LightContainer{
   bindFullWidthResize(){
     var self = this;
 
-    window.addEventListener('resize', function(){ self.wrapper.style.left = -this.el.offsetLeft+'px'; });
+    window.addEventListener('resize', function(){ self.wrapper.style.left = -self.getContainerOffsetLeft()+'px'; });
   }
 
   /* CUSTOM EVENTS */
