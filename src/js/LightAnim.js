@@ -1,23 +1,33 @@
 import {LightContainer} from './LightContainer.js';
-
+/*
+  config : {
+    selector: 'light-container'
+  }
+*/
 export class LightAnim{
 
-  constructor(selector){
+  constructor(config){
+
+    this.getConfig(config);
+
+
 
     this.containers = [];
-    this.selector = selector || 'light-container';
     this.init();
     this.bindEvt();
 
   }
 
   init(){
+
     this.getStyles();
+
     var containers = document.getElementsByClassName(this.selector);
     for (var i = 0; i < containers.length; i++) {
       var container = containers[i];
       this.createContainer(container);
     }
+
   }
 
   getStyles(){
@@ -36,6 +46,8 @@ export class LightAnim{
         '.light-figure{  position: absolute;  animation-iteration-count: infinite; } ' +
         '.light-img{  transition: opacity 3s ease;  animation-duration: 5s;  animation-iteration-count: infinite;  animation-timing-function: ease; } ' +
         '.light-content{  z-index: 100; } ' +
+        '.light-container > .light-dodge-container { display: none; opacity: 0; }' +
+        '.light-container > .light-img-container .light-dodge-container { display: block; top: 0; left: 0; width: 100%; height: 100%; }'
         '.light-debug{  font-size: 1rem;  position: absolute;  max-width: 100%; } ' +
         '.light-anim-debug-block { position: absolute; border: 1px solid red }' +
         ' .light-container, .light-content{ transition: all 2s linear; animation-duration: 20s; animation-iteration-count: infinite; animation-timing-function: linear; }' +
@@ -45,8 +57,12 @@ export class LightAnim{
     document.body.appendChild(styles);
   }
 
-  createContainer(el){
-    var newContainer = new LightContainer(el);
+  createContainer( el ){
+    var config = {
+      el: el,
+      dodgeBrowser: this.dodgeBrowsers()
+    };
+    var newContainer = new LightContainer( config );
     this.containers.push(newContainer);
   }
 
@@ -62,6 +78,32 @@ export class LightAnim{
       var container = this.containers[i];
       container.toggleState();
     }
+  }
+
+  getConfig(config){
+    var selector;
+
+    if( typeof(config) == 'string' ) selector = config;
+    if( typeof(config) == 'object' ) selector = config.selector;
+
+    this.selector = selector || 'light-container';
+
+  }
+
+  dodgeBrowsers(){
+    if( isTouchBrowser() ) return true;
+    return false;
+
+    function isTouchBrowser(){
+      try {
+          document.createEvent('TouchEvent');
+          return true;
+      }
+      catch( e ){
+          return false;
+      }
+    }
+
   }
 
 }

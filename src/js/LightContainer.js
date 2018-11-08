@@ -4,20 +4,32 @@ import {LightImg} from './LightImg.js';
 
 export class LightContainer{
 
-  constructor(el){
+  constructor( config ){
 
-      this.el = el;
+      this.el = config.el;
       this.ratio = this.el.offsetWidth / this.el.offsetHeight;
+
+      this.getConfig( config );
+
+
 
       this.getInnerContent();
       this.imgs = [];
       this.dataImgs = [];
-      this.start = el.offsetTop;
+      this.start = this.el.offsetTop;
       this.maxErrors = 1000;
       this.minSize = 50;
       this.maxSize = 200;
       this.lastState = 0;
       this.toggleState();
+
+
+  }
+
+  dodgeBrowser(){
+    if(this.type.debug) console.log( 'Slow browser mode active' );
+    this.dodgeEl = this.el.getElementsByClassName('light-dodge-container')[0];
+    if(this.dodgeEl) this.imgContainer.appendChild( this.dodgeEl );
 
   }
 
@@ -26,9 +38,14 @@ export class LightContainer{
       this.startT = Date.now();
       var imgs = [];
 
-      this.getConfig();
-
       this.initImgContainer();
+
+      if(this.type.dodgeBrowser) {
+        this.dodgeBrowser();
+        this.inited = true;
+        this.doLoad();
+        return false;
+      }
 
       // LOAD DOM IMGS FIRST
       var imgsFromDom = this.getFromDom();
@@ -69,10 +86,13 @@ export class LightContainer{
           this.innerContent = contents[0];
       }
   }
-  getConfig(){
+  getConfig( config ){
+
       var dataAnim = this.el.getAttribute('data-anim') || '';
       this.type = utils.stringToObj(dataAnim);
       this.onload = this.el.getAttribute('data-load') || null;
+
+      this.type = Object.assign( this.type, config );
   }
 
   initImgContainer(){
@@ -84,7 +104,7 @@ export class LightContainer{
       this.el.appendChild(this.wrapper);
 
       if( this.type.fullWidth ){
-          // console.log(this.getContainerOffsetLeft());
+
           this.wrapper.style.left = -this.getContainerOffsetLeft()+'px';
 
           this.wrapper.style.width = '100vw';
@@ -96,7 +116,6 @@ export class LightContainer{
   }
   getContainerOffsetLeft(){
     var offsetX = this.el.getBoundingClientRect().left;
-    console.log(offsetX);
     return offsetX;
 
   }
@@ -382,8 +401,6 @@ export class LightContainer{
       }
 
       if(this.type.debug) console.log('Imgs placed in', Date.now() - startFill +'ms', this.failedFill);
-
-      console.log(this.dataImgs);
 
       this.doLoad();
 
