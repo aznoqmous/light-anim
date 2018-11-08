@@ -95,18 +95,6 @@ export class LightContainer{
 
   }
   getContainerOffsetLeft(){
-    /* TEST PURPOSE */
-    // var offsets = [];
-    // var offsetX = 0;
-    // var el = this.el;
-    // while(el){
-    //   offsetX += el.offsetLeft;
-    //   offsets.push(el.offsetLeft);
-    //   el = el.parentElement;
-    // }
-    // console.log(this.el, offsets);
-
-
     var offsetX = this.el.getBoundingClientRect().left;
     console.log(offsetX);
     return offsetX;
@@ -349,7 +337,7 @@ export class LightContainer{
         if( this.type.fullWidth ) {
 
           var obj = {
-            offsetLeft: this.el.offsetLeft,
+            offsetLeft: this.getContainerOffsetLeft() + this.innerContent.offsetLeft ,
             offsetTop: this.innerContent.offsetTop,
             width: this.innerContent.offsetWidth,
             height: this.innerContent.offsetHeight
@@ -415,6 +403,18 @@ export class LightContainer{
   createDataObject(el){
       var obj = {x: el.offsetLeft, y: el.offsetTop, width: el.offsetWidth || el.width, height: el.offsetHeight || el.height};
       this.dataImgs.push(obj);
+      // if( this.type.debug ) this.appendDataObject(obj);
+  }
+  appendDataObject(obj){
+    var debugEl = document.createElement('div');
+    debugEl.classList.add('light-anim-debug-block');
+
+    this.imgContainer.appendChild(debugEl);
+
+    debugEl.style['left'] = obj.x+'px';
+    debugEl.style.top = obj.y+'px';
+    debugEl.style.width = obj.width+'px';
+    debugEl.style.height = obj.height+'px';
   }
   placeObject(img){
       var it = 0;
@@ -516,7 +516,7 @@ export class LightContainer{
       img.container.style.width = newWidth+'px' || 100;
       img.container.style.height = newHeight+'px' || 100;
 
-      if( newPosX ) img.x = newPosX / this.el.offsetWidth * 100;
+      if( newPosX ) img.x = newPosX / this.imgContainer.offsetWidth * 100;
       if( newPosY ) img.y = newPosY / this.el.offsetHeight * 100;
 
       if( newWidth ) img.scale = newWidth / config.MAX_SIZE;
