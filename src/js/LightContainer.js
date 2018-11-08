@@ -11,8 +11,6 @@ export class LightContainer{
 
       this.getConfig( config );
 
-
-
       this.getInnerContent();
       this.imgs = [];
       this.dataImgs = [];
@@ -41,9 +39,9 @@ export class LightContainer{
       this.initImgContainer();
 
       if(this.type.dodgeBrowser) {
+        this.doLoad();
         this.dodgeBrowser();
         this.inited = true;
-        this.doLoad();
         return false;
       }
 
