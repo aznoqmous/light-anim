@@ -28,7 +28,7 @@ export class LightContainer{
     if(this.type.debug) console.log( 'Slow browser mode active' );
     this.dodgeEl = this.el.getElementsByClassName('light-dodge-container')[0];
     if(this.dodgeEl) this.imgContainer.appendChild( this.dodgeEl );
-
+    this.doLoad();
   }
 
   init(){
@@ -39,9 +39,9 @@ export class LightContainer{
       this.initImgContainer();
 
       if(this.type.dodgeBrowser) {
-        this.doLoad();
         this.dodgeBrowser();
         this.inited = true;
+
         return false;
       }
 
@@ -89,7 +89,6 @@ export class LightContainer{
       var dataAnim = this.el.getAttribute('data-anim') || '';
       this.type = utils.stringToObj(dataAnim);
       this.onload = this.el.getAttribute('data-load') || null;
-
       this.type = Object.assign( this.type, config );
   }
 

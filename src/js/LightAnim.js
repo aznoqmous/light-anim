@@ -34,6 +34,14 @@ export class LightAnim{
     var styles = document.createElement('style');
     styles.innerHTML = '/* LIGHT ANIM STYLES */ ' +
         'body{  overflow-x: hidden;  width: 100vw; } ' +
+        '@keyframes idleWander{  ' +
+        '   from { transform: translate(0px, 0px); }  20%{ transform: translate(10px, 5px); }  50%{ transform: translate(5px, 20px); } to { transform: translate(0px, 0px); } } ' +
+        '@keyframes infiniteRotate{  ' +
+        '   from { transform: rotate(0deg); } to { transform: rotate(360deg); } } ' +
+        '@keyframes infiniteCounterRotate{  ' +
+        '   from { transform: rotate(0deg); } to { transform: rotate(-360deg); } } ' +
+        '@keyframes infiniteWanderCounterRotate{  ' +
+        '   from { transform: rotate(0deg) translate(0px, 0px); }  20%{ transform: translate(10px, 5px); }  50%{ transform: translate(5px, 20px); } to { transform: rotate(-360deg) translate(0px, 0px); } }' +
         '.light-container{  position: relative; } ' +
         '.light-container.ready{  opacity: 1; } ' +
         '.light-container > img{  pointer-events: none;  user-select: none;  opacity: 0; } ' +
@@ -50,10 +58,7 @@ export class LightAnim{
         '.light-container > .light-img-container .light-dodge-container { display: block; top: 0; left: 0; width: 100%; height: 100%; }'
         '.light-debug{  font-size: 1rem;  position: absolute;  max-width: 100%; } ' +
         '.light-anim-debug-block { position: absolute; border: 1px solid red }' +
-        ' .light-container, .light-content{ transition: all 2s linear; animation-duration: 20s; animation-iteration-count: infinite; animation-timing-function: linear; }' +
-        '@keyframes idleWander{  from { transform: translate(0px, 0px); }  20%{ transform: translate(10px, 5px); }  50%{ transform: translate(5px, 20px); }  to { transform: translate(0px, 0px); } } ' +
-        '@keyframes infiniteRotate{  from { transform: rotate(0deg); }  to { transform: rotate(360deg); } } @keyframes infiniteCounterRotate{  from { transform: rotate(0deg); }  to { transform: rotate(-360deg); } } ' +
-        '@keyframes infiniteWanderCounterRotate{  from { transform: rotate(0deg) translate(0px, 0px); }  20%{ transform: translate(10px, 5px); }  50%{ transform: translate(5px, 20px); }  to { transform: rotate(-360deg) translate(0px, 0px); } }';
+        '.light-container, .light-content{ transition: all 2s linear; animation-duration: 20s; animation-iteration-count: infinite; animation-timing-function: linear; }';
     document.body.appendChild(styles);
   }
 
@@ -70,7 +75,7 @@ export class LightAnim{
     var self = this;
     window.addEventListener('scroll', function(){
       self.doContainers();
-    });
+    }, { passive: true });
   }
 
   doContainers(){
