@@ -43,7 +43,7 @@ export class LightImg{
     this.parent = this.img.parentNode.parentNode;
     this.container = this.img.parentNode;
 
-    this.scale = img.scale;
+    this.scale = img.scale || 1;
 
     //CSS VALUES
     // this.baseDuration = this.type.duration || Math.floor((Math.random()*5+5)) ;
@@ -215,22 +215,16 @@ export class LightImg{
   }
 
   setActive(){
-    this.img.classList.add('active');
-    this.container.style.transition = this.containerTransition;
-    this.img.style.transition = this.imgTransition;
 
     var self = this;
+    var activeDelay = this.rainDelay || 0;
 
-    if(this.type.rain) {
-      setTimeout(function(){
-        self.img.classList.add('active');
-        self.applyActivePos();
-      }, this.rainDelay);
-      return true;
-    }
-
-
-    this.applyActivePos();
+    setTimeout(function(){
+      self.img.classList.add('active');
+      self.container.style.transition = self.containerTransition;
+      self.img.style.transition = self.imgTransition;
+      self.applyActivePos();
+    }, activeDelay);
 
   }
 
