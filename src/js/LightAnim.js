@@ -8,9 +8,9 @@ export class LightAnim{
 
   constructor(config){
 
+    this.getStyles();
+
     this.getConfig(config);
-
-
 
     this.containers = [];
     this.init();
@@ -19,8 +19,6 @@ export class LightAnim{
   }
 
   init(){
-
-    this.getStyles();
 
     var containers = document.getElementsByClassName(this.selector);
     for (var i = 0; i < containers.length; i++) {
@@ -96,19 +94,15 @@ export class LightAnim{
   }
 
   dodgeBrowsers(){
-    if( isTouchBrowser() ) return true;
-    return false;
-
-    function isTouchBrowser(){
-      try {
-          document.createEvent('TouchEvent');
-          return true;
-      }
-      catch( e ){
-          return false;
-      }
+    var ua = navigator.userAgent.toLowerCase();
+    if(
+        ua.split('mobile').length > 1 ||
+        ua.split('tablet').length > 1 ||
+        ua.split('ipad').length > 1
+    ){
+        return true;
     }
-
+    return false;
   }
 
 }
