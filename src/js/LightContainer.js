@@ -28,6 +28,8 @@ export class LightContainer{
         if(this.type.debug) console.log( 'Slow browser mode active' );
         this.dodgeEl = this.el.getElementsByClassName('light-dodge-container')[0];
         if(this.dodgeEl) this.imgContainer.appendChild( this.dodgeEl );
+        var self = this;
+        setTimeout(function(){ self.dodgeEl.classList.add('active') }, 1000);
         this.doLoad();
     }
 
