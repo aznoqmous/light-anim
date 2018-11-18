@@ -47,27 +47,38 @@ export class LightImg{
     this.scale = img.scale || 1;
 
     //CSS VALUES
-    // this.baseDuration = this.type.duration || Math.floor((Math.random()*5+5)) ;
     this.baseDuration = this.type.duration || Math.floor((Math.random()*5+5)) ;
     this.containerDuration = this.baseDuration;
     this.containerTransform = '';
 
-    this.imgTransition = 'opacity 3s ease';
-    this.imgBlur = 'blur(0px)';
 
-    
-
+    this.off = {};
+    this.on = {};
+    this.initImg();
+    this.initContainer();
   }
 
+  initImg(){
+    this.off.img = {};
+    this.off.img.transition = 'unset';
+    this.off.img.blur = 'blur(0px)';
+
+    this.on.img = {};
+    this.on.img.transition = 'opacity 3s ease';
+  }
+  initContainer(){
+    this.off.container = {};
+    this.off.container.transition = 'unset';
+
+    this.on.container = {};
+  }
 
   init(){
 
-
     this.container.style['animation-duration'] = Math.random()*5+5+'s';
 
-    this.img.style.transition = this.imgTransition;
+    this.img.style.transition = this.on.img.transition;
 
-    // this.containerTransition = this.calculatedContainerTransition;
     this.containerTransition = 'all '+this.baseDuration+'s ease';
 
     this.img.style.width = '100%';
@@ -225,15 +236,15 @@ export class LightImg{
       self.img.classList.add('active');
       self.container.style.transition = self.containerTransition;
       self.container.style['transform'] = self.containerTransform;
-      self.img.style.transition = self.imgTransition;
+      self.img.style.transition = self.on.img.transition;
       self.applyActivePos();
     }, activeDelay);
 
   }
 
   setOff(){
-    this.container.style.transition = 'unset';
-    this.img.style.transition = 'unset';
+    this.container.style.transition = this.off.container.transition;
+    this.img.style.transition = this.off.img.transition;
 
     if(this.type.reload) this.initPos();
     if(this.type.parallax) this.parallaxY = 0;
@@ -252,7 +263,7 @@ export class LightImg{
     this.img.classList.remove('active');
     this.containerDuration = this.baseDuration;
     this.container.style.transition = this.containerTransition;
-    this.img.style.transition = this.imgTransition;
+    this.img.style.transition = this.on.img.transition;
   }
 
   applyOffPos(){

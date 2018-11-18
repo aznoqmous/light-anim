@@ -433,7 +433,7 @@ export class LightContainer{
   createDataObject(el){
       var obj = {x: el.offsetLeft, y: el.offsetTop, width: el.offsetWidth || el.width, height: el.offsetHeight || el.height};
       this.dataImgs.push(obj);
-      // if( this.type.debug ) this.appendDataObject(obj);
+      if( this.type.debug ) this.appendDataObject(obj);
   }
   appendDataObject(obj){
       var debugEl = document.createElement('div');

@@ -53,7 +53,7 @@ export class LightAnim{
         '.light-img{  transition: opacity 3s ease;  animation-duration: 5s;  animation-iteration-count: infinite;  animation-timing-function: ease; } ' +
         '.light-content{  z-index: 100; } ' +
         '.light-container > .light-dodge-container { display: none; opacity: 0; }' +
-        '.light-container > .light-img-container .light-dodge-container { display: block; top: 0; left: 0; width: 100%; height: 100%; }'
+        '.light-container > .light-img-container .light-dodge-container { display: block; top: 0; left: 0; width: 100%; height: 100%; }' +
         '.light-debug{  font-size: 1rem;  position: absolute;  max-width: 100%; } ' +
         '.light-anim-debug-block { position: absolute; border: 1px solid red }' +
         '.light-container, .light-content{ transition: all 2s linear; animation-duration: 20s; animation-iteration-count: infinite; animation-timing-function: linear; }';
