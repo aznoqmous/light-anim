@@ -35,6 +35,7 @@ import * as utils from './utils.js';
 export class LightImg{
 
   constructor(img, x, y, type){
+
     this.img = img;
     this.x = x;
     this.y = y;
@@ -54,7 +55,7 @@ export class LightImg{
     this.imgTransition = 'opacity 3s ease';
     this.imgBlur = 'blur(0px)';
 
-    // this.init();
+    
 
   }
 
@@ -66,7 +67,8 @@ export class LightImg{
 
     this.img.style.transition = this.imgTransition;
 
-    this.containerTransition = this.calculatedContainerTransition;
+    // this.containerTransition = this.calculatedContainerTransition;
+    this.containerTransition = 'all '+this.baseDuration+'s ease';
 
     this.img.style.width = '100%';
     this.img.style.height = 'auto';
@@ -75,13 +77,13 @@ export class LightImg{
     if( !this.container.offsetHeight ) this.container.style.height = 100+'px';
 
     // INIT FROM
-    if( this.type.fromAround )      this.initAround();
-    else if( this.type.fromBoth )   this.initBoth();
-    else if( this.type.fromTop )   this.initTop();
+    if( this.type.fromAround )        this.initAround();
+    else if( this.type.fromBoth )     this.initBoth();
+    else if( this.type.fromTop )      this.initTop();
     else if( this.type.fromBottom )   this.initBottom();
-    else if( this.type.fromLeft )   this.initLeft();
-    else if( this.type.fromRight )  this.initRight();
-    else if( this.type.fromCenter ) this.initCenter();
+    else if( this.type.fromLeft )     this.initLeft();
+    else if( this.type.fromRight )    this.initRight();
+    else if( this.type.fromCenter )   this.initCenter();
     else  this.initIdle();
 
     if(  this.type.toContentBorder
@@ -222,6 +224,7 @@ export class LightImg{
     setTimeout(function(){
       self.img.classList.add('active');
       self.container.style.transition = self.containerTransition;
+      self.container.style['transform'] = self.containerTransform;
       self.img.style.transition = self.imgTransition;
       self.applyActivePos();
     }, activeDelay);
