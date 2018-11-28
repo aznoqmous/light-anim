@@ -65,11 +65,15 @@
 
   <body>
     <!-- TEST HOME FULLSCREEN -->
+    <style media="screen">
+      .light-figure { margin: -10px }
+      .light-frame { margin: 10px }
+    </style>
     <div class="fullscreen">
       <div class="light-container" style="width: 50vw; height: 100vh; margin: 0 auto"
       data-src="res/svgs/img" data-num="44" data-max="44"
 
-      data-anim="parallax fromBoth rain fullWidth transformScale reload duration:3">
+      data-anim="parallax wander rotate fromBoth rain fullWidth transformScale reload duration:3">
         <div class="center">
           <div class="light-content">
 
@@ -97,7 +101,7 @@
             <span>( try it by pressing F5 )</span>
             <div class="light-container" style="width: 100%; height: 100px;" data-src="res/svgs/img"
             data-num="32" data-max="44"
-            data-anim="fullWidth">
+            data-anim="stretchLeft fromLeft">
             </div>
           </div>
 

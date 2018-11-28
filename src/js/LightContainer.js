@@ -508,12 +508,15 @@ export class LightContainer{
       img.classList.add('light-img');
       var self = this;
 
-
       var container = document.createElement('figure');
       container.classList.add('light-figure');
 
+      var frame = document.createElement('div');
+      frame.classList.add('light-frame');
+
       this.imgContainer.appendChild(container);
-      container.appendChild(img);
+      container.appendChild(frame);
+      frame.appendChild(img);
 
       // GET ANIM DATAS
       var dataType = img.getAttribute('data-anim') || '';

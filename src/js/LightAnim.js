@@ -50,8 +50,9 @@ export class LightAnim{
         '.light-container .light-img-container.debug{  border: 1px solid red; } ' +
         '.light-container .light-img-container.debug:after{  position: absolute;  content: "";  left: calc(50% - 5px);  top: calc(50% - 5px);  border-radius: 50%;  background: red;  height: 10px;  width: 10px;  z-index: 100; } ' +
         '.light-container .light-img-container > div{  position: relative;  width: 100%;  height: 100%;  display: block;  transition: all 2s linear;  animation-duration: 20s;  animation-iteration-count: infinite;  animation-timing-function: linear; } ' +
-        '.light-figure{  position: absolute;  animation-iteration-count: infinite; } ' +
-        '.light-img{  transition: opacity 3s ease;  animation-duration: 5s;  animation-iteration-count: infinite;  animation-timing-function: ease; } ' +
+        '.light-figure {  position: absolute; } ' +
+        '.light-frame { position: relative; overflow: hidden;  animation-iteration-count: infinite; } ' +
+        '.light-img {  transition: opacity 3s ease;  animation-duration: 5s;  animation-iteration-count: infinite;  animation-timing-function: ease; } ' +
         '.light-content{  z-index: 100; } ' +
         '.light-container > .light-dodge-container { display: none; opacity: 0; }' +
         '.light-container > .light-img-container .light-dodge-container { display: block; top: 0; left: 0; width: 100%; height: 100%; }' +

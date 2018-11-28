@@ -37,12 +37,14 @@ export class LightImg{
   constructor(img, x, y, type){
 
     this.img = img;
+
     this.x = x;
     this.y = y;
     this.type = type || {  };
 
-    this.parent = this.img.parentNode.parentNode;
-    this.container = this.img.parentNode;
+    this.frame = this.img.parentNode;
+    this.container = this.frame.parentNode;
+    this.parent = this.container.parentNode;
 
     this.scale = img.scale || 1;
 
@@ -86,6 +88,8 @@ export class LightImg{
 
     if( !this.container.offsetWidth ) this.container.style.width = 100+'px';
     if( !this.container.offsetHeight ) this.container.style.height = 100+'px';
+
+    console.log(this.type.border);
 
     // INIT FROM
     if( this.type.fromAround )        this.initAround();
@@ -193,17 +197,17 @@ export class LightImg{
   }
 
   initWander(){
-    this.img.style['animation-name'] = 'idleWander';
-    this.img.style['animation-duration'] = Math.floor((Math.random()*5+5)*10)/10+'s';
+    this.frame.style['animation-name'] = 'idleWander';
+    this.frame.style['animation-duration'] = Math.floor((Math.random()*5+5)*10)/10+'s';
   }
   initOrbit(){
     var duration = utils.getStyle(this.parent, 'animation-duration');
     var iteration = utils.getStyle(this.parent, 'animation-iteration-count');
     var timingfunc = utils.getStyle(this.parent, 'animation-timing-function');
-    this.img.style['animation-name'] = 'infiniteCounterRotate';
-    this.img.style['animation-duration'] = duration;
-    this.img.style['animation-iteration-count'] = iteration;
-    this.img.style['animation-timing-function'] = timingfunc;
+    this.frame.style['animation-name'] = 'infiniteCounterRotate';
+    this.frame.style['animation-duration'] = duration;
+    this.frame.style['animation-iteration-count'] = iteration;
+    this.frame.style['animation-timing-function'] = timingfunc;
   }
 
 
