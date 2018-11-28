@@ -42,7 +42,8 @@ export class LightAnim{
         '   from { transform: rotate(0deg) translate(0px, 0px); }  20%{ transform: translate(10px, 5px); }  50%{ transform: translate(5px, 20px); } to { transform: rotate(-360deg) translate(0px, 0px); } }' +
         '.light-container{  position: relative; } ' +
         '.light-container.ready{  opacity: 1; } ' +
-        '.light-container > img{  pointer-events: none;  user-select: none;  opacity: 0; } ' +
+        '.light-container > img {  pointer-events: none;  user-select: none;  opacity: 0; } ' +
+        '.light-container img { backface-visibility: hidden; -webkit-backface-visibility: hidden } ' +
         '.light-container .light-img-container .light-figure .light-img{  opacity: 0;  transition: all 2s linear; } ' +
         '.light-container .light-img-container .light-figure .light-img.active{  opacity: 1; } ' +
         '.light-container .light-img-container{  position: absolute; pointer-events: none; top: 0;  left: 0;  width: 100%;  height: 100%;  display: block; } ' +
