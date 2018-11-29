@@ -42,7 +42,7 @@ export class LightImg{
     this.y = y;
     this.type = type || {  };
 
-    this.frame = this.img.parentNode;
+    this.frame = this.img.parentNode.parentNode;
     this.container = this.frame.parentNode;
     this.parent = this.container.parentNode;
 
@@ -88,8 +88,6 @@ export class LightImg{
 
     if( !this.container.offsetWidth ) this.container.style.width = 100+'px';
     if( !this.container.offsetHeight ) this.container.style.height = 100+'px';
-
-    console.log(this.type.border);
 
     // INIT FROM
     if( this.type.fromAround )        this.initAround();
@@ -228,7 +226,7 @@ export class LightImg{
     this.imgBlur = blur;
   }
   doBlur(delta){
-    this.img.style.filter = 'blur('+ this.imgBlur * Math.abs(delta) +'px)';
+    this.frame.style.filter = 'blur('+ this.imgBlur * Math.abs(delta) +'px)';
   }
 
   setActive(){

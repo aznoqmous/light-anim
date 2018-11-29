@@ -33,13 +33,13 @@ export class LightAnim{
     styles.innerHTML = '/* LIGHT ANIM STYLES */ ' +
         'body{  overflow-x: hidden;  width: 100vw; } ' +
         '@keyframes idleWander{  ' +
-        '   from { transform: translate(0px, 0px); }  20%{ transform: translate(10px, 5px); }  50%{ transform: translate(5px, 20px); } to { transform: translate(0px, 0px); } } ' +
+        '   from { transform: translate3d(0px, 0px, 0); }  20%{ transform: translate3d(10px, 5px, 0); }  50%{ transform: translate3d(5px, 20px, 0); } to { transform: translate3d(0px, 0px, 0); } } ' +
         '@keyframes infiniteRotate{  ' +
         '   from { transform: rotate(0deg); } to { transform: rotate(360deg); } } ' +
         '@keyframes infiniteCounterRotate{  ' +
         '   from { transform: rotate(0deg); } to { transform: rotate(-360deg); } } ' +
         '@keyframes infiniteWanderCounterRotate{  ' +
-        '   from { transform: rotate(0deg) translate(0px, 0px); }  20%{ transform: translate(10px, 5px); }  50%{ transform: translate(5px, 20px); } to { transform: rotate(-360deg) translate(0px, 0px); } }' +
+        '   from { transform: rotate(0deg) translate3d(0px, 0px, 0); }  20%{ transform: translate3d(10px, 5px, 0); }  50%{ transform: translate3d(5px, 20px, 0); } to { transform: rotate(-360deg) translate3d(0px, 0px, 0); } }' +
         '.light-container{  position: relative; } ' +
         '.light-container.ready{  opacity: 1; } ' +
         '.light-container > img {  pointer-events: none;  user-select: none;  opacity: 0; } ' +
@@ -51,7 +51,8 @@ export class LightAnim{
         '.light-container .light-img-container.debug:after{  position: absolute;  content: "";  left: calc(50% - 5px);  top: calc(50% - 5px);  border-radius: 50%;  background: red;  height: 10px;  width: 10px;  z-index: 100; } ' +
         '.light-container .light-img-container > div{  position: relative;  width: 100%;  height: 100%;  display: block;  transition: all 2s linear;  animation-duration: 20s;  animation-iteration-count: infinite;  animation-timing-function: linear; } ' +
         '.light-figure {  position: absolute; } ' +
-        '.light-frame { position: relative; overflow: hidden;  animation-iteration-count: infinite; } ' +
+        '.light-frame { position: relative; overflow: hidden; animation-iteration-count: infinite; width: 100% } ' +
+        '.light-frame-inner { margin-bottom: -6px }' +
         '.light-img {  transition: opacity 3s ease;  animation-duration: 5s;  animation-iteration-count: infinite;  animation-timing-function: ease; } ' +
         '.light-content{  z-index: 100; } ' +
         '.light-container > .light-dodge-container { display: none; opacity: 0; }' +

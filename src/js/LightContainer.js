@@ -514,9 +514,13 @@ export class LightContainer{
       var frame = document.createElement('div');
       frame.classList.add('light-frame');
 
+      var frameInner = document.createElement('div');
+      frameInner.classList.add('light-frame-inner');
+
       this.imgContainer.appendChild(container);
       container.appendChild(frame);
-      frame.appendChild(img);
+      frame.appendChild(frameInner);
+      frameInner.appendChild(img);
 
       // GET ANIM DATAS
       var dataType = img.getAttribute('data-anim') || '';
